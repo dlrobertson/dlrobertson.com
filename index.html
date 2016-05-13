@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link rel="icon" type="image/png" href="/images/favicon.png" />
+        <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+        <script>
+            var d = document.documentElement.style
+            if(!(('flexWrap' in d) || ('WebkitFlexWrap' in d) || ('msFlexWrap' in d))){
+                  alert('Your browser does not support `flex-wrap`. This Website heavily relys on `display: flex` and may not display properly');
+            }
+            function navCollapse() {
+                var items = document.getElementById("nav");
+                console.log(items.style.display);
+                if(items.style.display == "none") {
+                    items.style.display = "block";
+                } else if(items.style.display == "block") {
+                    items.style.display = "none";
+                } else if(window.innerWidth <= 400) {
+                    items.style.display = "block";
+                } else {
+                    items.style.display = "none";
+                }
+            }
+        </script>
+        <link rel="stylesheet" href="/css/main.css">
+    </head>
+    <body>
+        <div id="top-bar">
+            <ul class="navigation">
+                <li><button onclick="navCollapse()" class="fa fa-bars"></button></li>
+                <li id="me"><a href="/index.html">Daniel Robertson</a></li>
+            </ul>
+        </div>
+        <div id="angle0">
+        </div>
+        <div id="angle1">
+        </div>
+        <div id="nav">
+            <div id="nav-list">
+                <ul id="destinations" class="navigation">
+                    <li><a href="/index.html">About Me</a></li>
+                    <li><a href="/drobertson.pdf">Resume</a></li>
+                    <li><a href="#">Projects</a>
+                        <ul>
+                            <li><a href="http://anidata.org/">Anidata</a></li>
+                            <li><a href="https://servo.org/">Servo</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id = "main">
+            <div id="article">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <br>
+                        <div id="profile" class="row carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">
+                              <li data-target="#profile" data-slide-to="0" class="active"></li>
+                              <li data-target="#profile" data-slide-to="1"></li>
+                              <li data-target="#profile" data-slide-to="2"></li>
+                            </ol>
+            
+                            <div class="carousel-inner" role="listbox">
+                              <div class="item active">
+                                <img src="/images/git.jpg" alt="Jessie and I">
+                              </div>
+            
+                              <div class="item">
+                                <img src="/images/fishing.jpg" alt="On the lake">
+                              </div>
+            
+                              <div class="item">
+                                <img src="/images/rome.jpg" alt="Rome">
+                              </div>
+                            </div>
+            
+                            <a class="left carousel-control" href="#profile" role="button" data-slide="prev">
+                              <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                              <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" href="#profile" role="button" data-slide="next">
+                              <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                              <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-sm-7 col-sm-offset-1">
+                        <div class="row">
+                            <h2>About Me</h2>
+                        </div>
+                        <div class="row">
+                            I am an aspiring
+            		<a href="https://medium.com/@rchang/my-two-year-journey-as-a-data-scientist-at-twitter-f0c13298aee6#.spvah02rb">"Type B"</a>
+            		Data Scientist, and I am currently
+                            in my second year of an ORISE Fellowship as a Mathematical Statistician
+                            at the <a href="http://www.cdc.gov">Centers for Disease Control and
+                            Prevention (CDC)</a>. I work for a team that studies
+                            <a href="http://www.cdc.gov/cfs/">Chronic Fatigue Syndrome (ME/CFS)</a>. I
+                            am fortunate to have a unique position that allows me to
+                            combine my passion for writing code and data science. In my
+                            free time I enjoy contributing to open source projects, homebrewing,
+            		learning more about programming, fishing, and spending time with my lovely wife.
+                            My favorite language is <a href="https://www.rust-lang.org/">Rust</a>,
+                            but I spend most my time using  C/C++ or Python.
+                            And yes, I use the best editor known to mankind... <a href="http://www.vim.org/">vim</a>.
+                        </div>
+                        <br>
+                        <div class="row">
+                            <h2>Fun projects I'm working on</h2>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <b><a href="https://servo.org/">servo</a></b>
+                                (<a href="https://github.com/servo/servo">git</a>)
+                                (<a href="https://doc.servo.org/servo/index.html">docs</a>)
+                            </div>
+                            <div class="col-sm-8">
+                                <i>"<b>Servo</b> is a modern, performant browser engine designed to be appropriate for applications
+                                including embedded use. Written in Mozilla's new systems programming language, Rust, the
+                                Servo project aims to achieve better parallelism, security, modularity, and performance."</i>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <b><a href="https://github.com/danlrobertson/rust-cpuid">rust-cpuid</a></b>
+                            </div>
+                            <div class="col-sm-8">
+                                A simple wrapper around the x86 cpuid
+                                instruction written in Rust and x86 assembly
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <h2>Tools and Books</h2>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5">
+                              A short list of my favorite tools that I use daily, and I would
+                              suggest looking into if you have not already done so.
+                              <ul id="tools">
+                                  <li><a href="http://www.vim.org/">vim</a></li>
+                                  <li><a href="http://llvm.org/">All things LLVM</a></li>
+                                  <li><a href="http://tmux.sourceforge.net/">tmux</a></li>
+                                  <li><a href="https://git-scm.com/book/en/v2">git</a></li>
+                                  <li><a href="http://www.gnu.org/software/gdb/">gdb</a> or <a href="http://lldb.llvm.org">lldb</a></li>
+                                  <li><a href="http://valgrind.org/">valgrind</a></li>
+                                  <li><a href="https://www.gentoo.org/">Gentoo</a>,
+                                      <a href="https://www.archlinux.org/">Arch</a>, or
+                                      <a href="https://www.freebsd.org/">FreeBSD</a></li>
+                              </ul>
+                            </div>
+                            <div class="col-sm-5">
+                              A short list of good books that have had a tremendous impact on me.
+                              <ul>
+                                  <li><a href="https://en.wikipedia.org/wiki/Design_Patterns">Design Patterns</a></li>
+                                  <li><a href="https://www.google.com/shopping/product/8919293141115606166/specs?safe=active&q=computer+systems+a+programmer%27s+perspective&spell=1&biw=1364&bih=678&bav=on.2,or.r_cp.&bvm=bv.105841590,d.eWE&tch=1&ech=1&psi=QzAtVomXM4mzmwHVwJfwBQ.1445802050931.3&sa=X&ved=0CHkQuC9qFQoTCLffwq-w3sgCFUcmJgod_K4J6A">Computer Systems: A Programmer's Perspective</a></li>
+                                  <li><a href="https://mitpress.mit.edu/sicp/full-text/book/book.html">Structure and Interpretation of Computer Programs</a></li>
+                                  <li><a href="http://www.amazon.com/Linux-Bible-Christopher-Negus/dp/1118999878?tag=duckduckgo-d-20">Linux Bible</a></li>
+                                  <li><a href="https://git-scm.com/book/en/v2">Pro Git</a></li>
+                                  <li><a href="http://www.amazon.com/Modern-Epidemiology-Kenneth-J-Rothman/dp/1451190050">Modern Epidemiology</a></li>
+                              </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div id="contact">
+                <div id="icons">
+                    <a href="https://gitlab.com/drobertson">
+                        <img src="/images/gitlab.png" height="13px" class="sosh-med">
+                    </a>
+                    <a href="https://github.com/danlrobertson">
+                        <img src="/images/GitHub-Mark-Light-64px.png" class="sosh-med" height="13px">
+                    </a>
+                    <a href="http://stackoverflow.com/users/4450336/daniel-robertson">
+                        <img src="/images/so-icon.png" class="sosh-med" height="13px">
+                    </a>
+                    <a href="mailto:danlrobertson89@gmail.com">
+                        <img src="/images/email.png"class=" sosh-med" height="13px">
+                    </a>
+                    <a href="http://www.linkedin.com/in/daniellutherrobertson">
+                        <img src="/images/linkedin.png" class="sosh-med" height="13px">
+                    </a>
+                </div>
+                <div id="dummy-dom">
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

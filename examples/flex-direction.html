@@ -1,0 +1,88 @@
+<html>
+    <head>
+<style>
+#container {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    background: #202020;
+    height: 500px;
+    width: 500px;
+    z-index: -1;
+}
+#container > div {
+    height: 100px;
+    width: 100px;
+}
+#item0 {
+    background: red;
+}
+#item1 {
+    background: yellow;
+}
+#item2 {
+    background: blue;
+}
+</style>
+<script>
+function row() {
+    var elem = document.getElementById("container");
+    elem.style["flex-direction"] = "row";
+}
+function row_reverse() {
+    var elem = document.getElementById("container");
+    elem.style["flex-direction"] = "row-reverse";
+}
+function column() {
+    var elem = document.getElementById("container");
+    elem.style["flex-direction"] = "column";
+}
+function column_reverse() {
+    var elem = document.getElementById("container");
+    elem.style["flex-direction"] = "column-reverse";
+}
+</script>
+    </head>
+    <body>
+        <div id="container" style="flex-direction: row;">
+            <div id="item0">
+            </div>
+            <div id="item1">
+            </div>
+            <div id="item2">
+            </div>
+        </div>
+        <h2>Change the flex-direction</h2>
+        <button onclick="row()">Row</button>
+        <button onclick="row_reverse()">Row Reverse</button>
+        <button onclick="column()">Column</button>
+        <button onclick="column_reverse()">Column Reverse</button>
+        <div>
+            <h2>CSS Used</h2>
+            <xmp>
+#container {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    background: #202020;
+    height: 500px;
+    width: 500px;
+    z-index: -1;
+}
+#container > div {
+    height: 100px;
+    width: 100px;
+}
+#item0 {
+    background: red;
+}
+#item1 {
+    background: yellow;
+}
+#item2 {
+    background: blue;
+}
+            </xmp>
+        </div>
+    </body>
+</html>
