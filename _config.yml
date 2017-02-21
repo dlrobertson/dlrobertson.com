@@ -1,0 +1,1 @@
+exclude: ["slides/reveal.js/demo.html", "slides/reveal.js/index.html"]

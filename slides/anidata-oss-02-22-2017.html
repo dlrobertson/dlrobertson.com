@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>What can Anidata learn from OSS</title>
+
+        <meta name="description" content="A short talk of my thoughts on OSS and what Anidata can learn from it">
+        <meta name="author" content="Dan Robertson">
+
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="reveal.js/css/reveal.css">
+        <link rel="stylesheet" href="reveal.js/css/theme/blood.css" id="theme">
+
+        <link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
+
+        <script>
+            var link = document.createElement( 'link' );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = window.location.search.match( /print-pdf/gi ) ? 'reveal.js/css/print/pdf.css' : 'reveal.js/css/print/paper.css';
+            document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+
+    </head>
+
+    <body>
+
+        <div class="reveal">
+
+            <div class="slides">
+                <section>
+                    <h2>What can we learn from OSS?</h1>
+                    <p>
+                        <small>(And why)</small>
+                    </p>
+                    <p>
+                        <small>Created by <a href="http://danrobertson.org">Dan Robertson</a> / <a href="http://github.com/danlrobertson">GitHub</a></small>
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Why I love OSS</h3>
+                    <section>
+                        <p>
+                            <small>(My story)</small>
+                        </p>
+                    </section>
+                    <section>
+                        <img src="images/contributor-funnel.png" height="50%" width="50%" style="border: none"/>
+                    </section>
+                </section>
+
+                <section>
+                    <h3>Resources</h3>
+                    <ul>
+                        <span class="fragment">
+                            <li><a href="https://opensource.guide/">GitHub Open Source Guides</a></li>
+                        </span>
+                        <span class="fragment">
+                            <li><a href="http://www.catb.org/~esr/">Eric S. Raymond</a></li>
+                            <ul>
+                                <li><a href="http://www.catb.org/esr/writings/cathedral-bazaar/cathedral-bazaar/index.html#catbmain">The Cathedral and the Bazaar</a></li>
+                                <li><a href="http://www.catb.org/esr/faqs/hacker-howto.html#why_this">How To Become A Hacker</a></li>
+                                <li><a href="http://www.catb.org/~esr/faqs/smart-questions.html#disclaimer">How To Ask Questions The Smart Way</a></li>
+                            </ul>
+                        </span>
+                        <span class="fragment">
+                            <li><a href="http://mozillascience.github.io/working-open-workshop/">Mozilla Science</a></li>
+                        </span>
+                        <span class="fragment">
+                            <li><a href="https://git-scm.com/book/en/v2">Git - Book</a></li>
+                        </span>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Open Source Software</h3>
+                    <p>
+                        <small>(It's not just <a href="https://github.com">GitHub</a>)</small>
+                    </p>
+                    <br>
+                    <span class="fragment">
+                        <ol>
+                            <li>Free Redistrobution</li>
+                            <li class="fragment">Source Code</li>
+                            <li class="fragment"><i>Derived works*</i></li>
+                        </ol>
+                    </span>
+                    <br>
+                    <br>
+                    <br>
+                    <p>
+                        <small><cite><a href="https://opensource.org/osd-annotated">The Open Source Definition (Annotated)</a></cite></small>
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Why the world cares about OSS</h2>
+                </section>
+
+                <section>
+                    <h3>Linus Torvalds</h3>
+                    <section>
+                        <img src="images/torvalds.jpg" height="50%" width="50%" style="border: none"/>
+                    </section>
+                    <section>
+                        <ul>
+                            <li class="fragment grow"><a href="https://github.com/torvalds/linux">Linux kernel</a></li>
+                            <li><a href="https://github.com/git/git">git</a></li>
+                            <li><a href="http://git.subsurface-divelog.org/">Subsurface</a></li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h4>Humble Beginnings</h3>
+                        <small>
+                            <blockquote cite="http://www.thelinuxdaily.com/2010/04/the-first-linux-announcement-from-linus-torvalds/">
+                                I’m doing a (free) operating system (just a hobby, won’t be big and
+                                professional like gnu) for 386(486) AT clones. This has been brewing
+                                since april, and is starting to get ready. I’d like any feedback on
+                                things people like/dislike in minix...
+                            </blockquote>
+                        </small>
+                    </section>
+                    <section>
+                        <h4>The Linux Kernel Now</h4>
+                        <ul>
+                            <li>Over 16 million lines of code<sup><a href="https://www.linuxcounter.net/statistics/kernel">1</a></sup></li>
+                            <li>433 of the top 500 supercomputers run Linux<sup><a href="https://www.top500.org/statistics/list/">2</a></sup></li>
+                            <li>At least 389 swear words<sup><a href="https://www.linuxcounter.net/statistics/kernel">1</a></sup></li>
+                            <li>Derived Works</li>
+                            <ul>
+                                <li>ChromeOS</li>
+                                <li>Android</li>
+                                <li>And many many more...</li>
+                            </ul>
+                        </ul>
+                    </section>
+                    <section>
+                        <blockquote cite="http://www.catb.org/~esr/writings/cathedral-bazaar/cathedral-bazaar/ar01s11.html">
+                            Linux was the first project for which a conscious and successful effort to use the entire world as its talent pool was made
+                        </blockquote>
+                    </section>
+                </section>
+
+                <section>
+                    <h2>Heartbleed</h2>
+                    <section>
+                        <img src="images/heartbleed.png" height="200px" style="border: none"/>
+                    </section>
+                    <section>
+                        <blockquote cite ="http://www.catb.org/~esr/writings/cathedral-bazaar/cathedral-bazaar/">
+                            Given enough eyeballs, all bugs are shallow - "Linus's Law"
+                        </blockquote>
+                    </section>
+                </section>
+
+                <section>
+                    <h2>Why you should care about OSS</h2>
+                </section>
+
+                <section>
+                    <section>
+                        <ul>
+                            <li>Improve skillz</li>
+                            <li>Learn how to communicate better</li>
+                            <li>Make an impact</li>
+                            <li>Be mentored</li>
+                            <li>Make friends</li>
+                        </ul>
+                    </section>
+                    <section>
+                        Contributions are <u>not</u> limmited to just code
+                    </section>
+                </section>
+                
+                <section>
+                    <section>
+                        <h2>Why we care about OSS</h2>
+                    </section>
+                    <section data-background="images/andy.gif" style="color:#dd5566">
+                        <h3 style="color:#a23">... We are an OSS organization</h3>
+                    </section>
+                    <section>
+                        We have the same goals as most OSS organizations
+                    </section>
+                </section>
+
+                <section>
+                    <h4>What can we learn from other OSS projects?</h4>
+                    <section>
+                        <small>(heavily biased)</small>
+                    </section>
+                    <section>
+                        The culture of the organization is crucial to its success
+                    </section>
+                    <section>
+                        <ul>
+                            <li>Maintain an active "working directory"</li>
+                            <li>Maintain an active chat channel</li>
+                            <li>Maintain an active mailing list</li>
+                            <li class="fragment grow">Streamline the entry process</li>
+                            <li class="fragment grow">Standards</li>
+                            <ul>
+                                <li>Define standards</li>
+                                <li>Make them publicly available</li>
+                                <li>Critique with care</li>
+                            </ul>
+                        </ul>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Write some code!</h3>
+                        <img src="images/code.gif" style="border:none"/>
+                    </section>
+                    <section>
+                        <h3>Writing your first commit</h3>
+                        <br>
+                        <ol>
+                            <li>Make sure the project is active</li>
+                            <li>Research</li>
+                            <ul>
+                                <li>Read the CONTRIBUTING.md</li>
+                                <li>Read all the documentation you can</li>
+                            </ul>
+                            <li>Start small and find an easy issue</li>
+                        </ol>
+                    </section>
+                    <section>
+                        <h3>Final notes</h3>
+                        <ul>
+                            <li>Seek out help <u>after</u> you have done your research</li>
+                            <li>Be very open to critiques.</li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section style="text-align: left;">
+                    <h1>THE END</h1>
+                    <br>
+                    <blockquote cite ="http://www.catb.org/~esr/writings/cathedral-bazaar/cathedral-bazaar/">
+                        Delegate everything you can, be open to the point of promiscuity
+                    </blockquote>
+                </section>
+
+                <section>
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="https://opensource.guide/">GitHub Open Source Guides</a></li>
+                        <li><a href="http://www.catb.org/~esr/">Eric S. Raymond</a></li>
+                        <ul>
+                            <li><a href="http://www.catb.org/esr/writings/cathedral-bazaar/cathedral-bazaar/index.html#catbmain">The Cathedral and the Bazaar</a></li>
+                            <li><a href="http://www.catb.org/esr/faqs/hacker-howto.html#why_this">How To Become A Hacker</a></li>
+                            <li><a href="http://www.catb.org/~esr/faqs/smart-questions.html#disclaimer">How To Ask Questions The Smart Way</a></li>
+                        </ul>
+                        <li><a href="http://mozillascience.github.io/working-open-workshop/">Mozilla Science</a></li>
+                        <li><a href="https://git-scm.com/book/en/v2">Git - Book</a></li>
+                    </ul>
+                </section>
+            </div>
+
+        </div>
+
+        <script src="reveal.js/lib/js/head.min.js"></script>
+        <script src="reveal.js/js/reveal.js"></script>
+
+        <script>
+
+            // More info https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+                // More info https://github.com/hakimel/reveal.js#dependencies
+                dependencies: [
+                    { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true },
+                    { src: 'reveal.js/plugin/notes/notes.js', async: true }
+                ]
+            });
+
+        </script>
+
+    </body>
+</html>
