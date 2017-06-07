@@ -1,3 +1,6 @@
 [submodule "slides/reveal.js"]
 	path = slides/reveal.js
 	url = https://github.com/hakimel/reveal.js.git
+[submodule "resume"]
+	path = resume
+	url = git@github.com:dlrobertson/resume.git
