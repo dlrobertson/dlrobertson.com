@@ -3,4 +3,4 @@
 	url = https://github.com/hakimel/reveal.js.git
 [submodule "resume"]
 	path = resume
-	url = git@github.com:dlrobertson/resume.git
+	url = https://github.com/dlrobertson/resume.git
