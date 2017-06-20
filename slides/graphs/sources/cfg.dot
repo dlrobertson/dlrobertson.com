@@ -1,0 +1,14 @@
+digraph G {
+    start[label="Start"]
+    cond1[label="Input is valid"]
+    loop1[label="Loop through input"]
+    loopbody1[label="Print argument"]
+    exit[label="Exit"]
+
+    start -> cond1
+    cond1 -> exit[label="Error"]
+    cond1 -> loop1
+    loop1 -> loopbody1
+    loopbody1-> loop1
+    loop1-> exit[label="Success"]
+}
