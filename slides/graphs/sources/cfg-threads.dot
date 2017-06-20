@@ -1,4 +1,5 @@
 digraph G {
+    graph[pad="0.5" nodesep="0.25", ranksep="0.25"]
     subgraph cluster0 {
         state[label="Global Program State"]
     }
