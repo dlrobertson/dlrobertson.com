@@ -41,7 +41,6 @@
     <body>
 
         <div class="reveal">
-
             <div class="slides">
                 <section>
                     <h2>A Basic Intro to Parallel Programming</h1>
@@ -62,13 +61,17 @@
                     <section>
                         <h3>Why not?</h3>
                         <ul>
-                            <li>It's hard</li>
-                            <li>Not building production systems</li>
+                            <li>It makes life hard</li>
                         </ul>
                     </section>
                     <section>
-                        <h3>Control Flow Graph</h3>
-                        <img src="images/cfg.png"/>
+                        <h3>Simple Control Flow Graph</h3>
+                        <img src="graphs/images/cfg-simple.png"/>
+                    </section>
+                    <section>
+                        <h3>Less Simple Control Flow Graph</h3>
+                        <img src="graphs/images/cfg-threads.png"/>
+                    </section>
                 </section>
                 <section>
                     <h3>Types of async code found in the wild</h3>
@@ -78,8 +81,38 @@
                         <li>Async IO</li>
                     </ul>
                 </section>
+                <section>
+                    <h3>Forks</h3>
+                    Multiple processes - super easy
+                </section>
+                <section>
+                    <h3>Threading</h3>
+                    Multiple components of a single process that <b>may share state</b>
+                    <section>
+                        <h3>Mutexes and Condition Variables</h3>
+                        Atomic variables that likely signal a state change
+                    </section>
+                    <section>
+                        <h3>Immutability</h3>
+                    </section>
+                </section>
+                <section>
+                    <h3>Async IO</h3>
+                    Do not wait to receive a response after sending a payload. Instead queue a callback.
+                </section>
+                <section>
+                    <h3>Common Thread Models</h3>
+                    <section>
+                        <h5>Master-Worker</h5>
+                    </section>
+                    <section>
+                        <h5>Pipeline</h5>
+                    </section>
+                </section>
+                <section>
+                    <h3>Lets look at some code!</h3>
+                </section>
             <div>
-
         </div>
 
         <script src="reveal.js/lib/js/head.min.js"></script>
