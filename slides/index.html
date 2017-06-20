@@ -16,7 +16,6 @@
             }
             function navCollapse() {
                 var items = document.getElementById("nav");
-                console.log(items.style.display);
                 if(items.style.display == "none") {
                     items.style.display = "block";
                 } else if(items.style.display == "block") {
@@ -28,7 +27,6 @@
                 }
             }
             function populateIframe(selected_text) {
-                console.log(selected_text)
                 if (selected_text) {
                     var iframeElement = document.getElementById("slide-iframe");
                     if (iframeElement) {
@@ -36,7 +34,7 @@
                     }
                     var aElement = document.getElementById("selected-fullscreen");
                     if (aElement) {
-                        a.href = selected_text
+                        aElement.href = selected_text
                     }
                 }
             }
@@ -74,6 +72,7 @@
             <div class="container">
                 <select onchange="if (this.selectedIndex >= 0) populateIframe(this.options[this.selectedIndex].value)">
                     <option value="anidata-oss-02-22-2017.html" selected="selected">Feb 22, 2017</option>
+                    <option value="anidata-pp-06-19-2017.html">June 19, 2017</option>
                 </select>
                 <a id="selected-fullscreen" href="anidata-oss-02-22-2017.html">Full Screen</a>
             </div>
