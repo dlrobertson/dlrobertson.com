@@ -8,9 +8,12 @@ DOT_IMAGE_NAMES := \
 	master-tm.png \
 	ndp-sra.png \
 	ndp-ura.png \
+	ndp-ura-attack1.png \
+	ndp-ura-attack2.png \
 	ndp-ar-network.png \
 	ndp-ar-host.png \
 	ndp-ar-attack.png
+
 DOT_OUTPUT := $(addprefix $(IMAGE_DIR)/, $(DOT_IMAGE_NAMES))
 
 all: $(DOT_OUTPUT)

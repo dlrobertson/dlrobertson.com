@@ -5,7 +5,7 @@ digraph ARN {
     color=none
     fontcolor="#aa2233"
     fontsize=20
-    bgcolor="#1b1a18"
+    bgcolor="#222222"
     edge[color="#aa2233", fontcolor="#aa2233", fontsize=20]
     node[fontcolor="#aa2233", fontsize=20]
     solicited_node[
