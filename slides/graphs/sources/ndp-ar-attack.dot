@@ -1,0 +1,32 @@
+digraph ARN {
+    compound=true
+    splines=true
+    nodesep=4
+    color=none
+    fontcolor="#aa2233"
+    fontsize=20
+    bgcolor="#1b1a18"
+    edge[color="#aa2233", fontcolor="#aa2233", fontsize=20]
+    node[fontcolor="#aa2233", fontsize=20]
+    node0[
+        label="Client A\nip: fe80::cbed:6822:cd23:bbdb\nmac: 52:54:00:c2:a7:7c"
+        style=filled
+        color=none
+        fillcolor="#eeeeee"
+    ]
+    node1[
+        label="Client B\nip: fe80::b95b:0ee1:cafe:9720\nmac: 52:54:00:e3:f4:06"
+        style=filled
+        color=none
+        fillcolor="#eeeeee"
+    ]
+    node3[
+        label="Attacker\nip: fe80::0216:3eff:fe87:7f3c\nmac: 00:16:3e:87:7f:3c"
+        style=filled
+        color=none
+        fillcolor="#eeeeee"
+    ]
+    node0 -> node1[label="Route to spoof", color=green, dir=both]
+    node3 -> node0[label="Neighbor Advertisement"]
+    node3 -> node1[label="Neighbor Advertisement"]
+}

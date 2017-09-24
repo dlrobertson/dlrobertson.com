@@ -28,7 +28,7 @@
             }
             function populateIframe(selected_text) {
                 if (selected_text) {
-                    var iframeElement = document.getElementById("slide-iframe");
+                    var iframeElement = document.getElementById("slideiframe");
                     if (iframeElement) {
                         iframeElement.src = selected_text
                     }
@@ -71,16 +71,17 @@
             <br>
             <div class="container">
                 <select onchange="if (this.selectedIndex >= 0) populateIframe(this.options[this.selectedIndex].value)">
-                    <option value="anidata-oss-02-22-2017.html" selected="selected">Feb 22, 2017</option>
+                    <option value="sylkie-09-23-2017.html" selected="selected">Sep 24, 2017</option>
+                    <option value="anidata-oss-02-22-2017.html">Feb 22, 2017</option>
                     <option value="anidata-pp-06-19-2017.html">June 19, 2017</option>
                 </select>
-                <a id="selected-fullscreen" href="anidata-oss-02-22-2017.html">Full Screen</a>
+                <a id="selected-fullscreen" href="sylkie-09-23-2017.html">Full Screen</a>
             </div>
             <br>
             <div class="container">
                 <div class="row">
                     <div class="col-md-8">
-                        <iframe id="slide-iframe" src="anidata-oss-02-22-2017.html" height="700px" width="1000px"/>
+                        <iframe id="slideiframe" src="sylkie-09-23-2017.html" height="700px" width="1000px"/>
                     </div>
                 </div>
             </div>

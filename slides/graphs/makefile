@@ -5,7 +5,12 @@ DOT_IMAGE_NAMES := \
 	cfg-simple.png \
 	cfg-threads.png \
 	pipeline-tm.png \
-	master-tm.png
+	master-tm.png \
+	ndp-sra.png \
+	ndp-ura.png \
+	ndp-ar-network.png \
+	ndp-ar-host.png \
+	ndp-ar-attack.png
 DOT_OUTPUT := $(addprefix $(IMAGE_DIR)/, $(DOT_IMAGE_NAMES))
 
 all: $(DOT_OUTPUT)

@@ -1,0 +1,50 @@
+digraph SRA {
+    label="Solicited Router Advertisement"
+    compound=true
+    splines=true
+    nodesep=4
+    color=none
+    fontcolor="#aa2233"
+    fontsize=20
+    bgcolor="#1b1a18"
+    edge[color="#aa2233", fontcolor="#aa2233", fontsize=20]
+    node[fontcolor="#aa2233", fontsize=20]
+    subgraph cluster0 {
+        style="invis"
+        label="Routers"
+        router0[
+            label="Router #0"
+            style=filled
+            color=none
+            fillcolor="#eeeeee"
+        ]
+        router1[
+            label="Router #1"
+            style=filled
+            color=none
+            fillcolor="#eeeeee"
+        ]
+    }
+    all_routers[
+        label="All Link-Local Routers (ff02::2)"
+        style=filled
+        color=none
+        fillcolor="#eeeeee"
+        shape=rectangle
+    ]
+    subgraph cluster1 {
+        label="Nodes"
+        style="invis"
+        node0[
+            label="Node #0"
+            style=filled
+            color=none
+            fillcolor="#eeeeee"
+        ]
+    }
+    node0 -> all_routers[label="Router Solicitation"]
+    all_routers -> router0
+    all_routers -> router1
+    router0 -> node0[label="Router Advertisement"]
+    router1 -> node0[label="Router Advertisement"]
+}

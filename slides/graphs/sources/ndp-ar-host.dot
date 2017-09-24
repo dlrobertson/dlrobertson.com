@@ -1,0 +1,83 @@
+digraph ARH {
+    label="Address Resolution\nfrom a Hosts Perspective"
+    compound=true
+    splines=true
+    color=none
+    fontcolor="#aa2233"
+    fontsize=20
+    bgcolor="#1b1a18"
+    nodesep=0.5
+    edge[
+        color="#aa2233"
+        fontcolor="#aa2233"
+        fontsize=20
+    ]
+    node[
+        fontcolor="#aa2233"
+        fontsize=20
+        fillcolor="#eeeeee"
+        style=filled
+    ]
+    nd_cache[
+        label="Neighbor Cache"
+        shape=oval
+    ]
+    subgraph cluster0 {
+        label="Sending Neighbor Solicitations"
+        ping[
+            label="ping -6 -c 1 fe80::b95b:0ee1:cafe:9720"
+            shape=rectangle
+        ]
+        is_in_cache[
+            label="Is fe80::b95b:0ee1:cafe:9720\nin the Neighbor Cache?"
+            shape=diamond
+        ]
+        is_stale[
+            label="Is the entry stale?"
+            shape=diamond
+        ]
+        fetch_ll_addr[
+            label="\
+Send Neighbor Advertisement\n\
+to Solicited Node Multicast Address\n\
+and Wait for Response"
+            shape=rectangle
+        ]
+        use_cached_addr[
+            label="Huzzah! We found the link-layer address!"
+        ]
+    }
+    subgraph cluster1 {
+        label="Receiving Neighbor Advertisements"
+        recv_na[
+            label="Received Neighbor Advertisement"
+            shape=rectangle
+        ]
+        na_valid[
+            label="Does advertisement pass validation"
+            shape=diamond
+        ]
+        update[
+            label="Update cache entry"
+            shape=rectangle
+        ]
+        discard_advert[
+            label="Discard the Neighbor Advertisement"
+            shape=rectangle
+        ]
+    }
+
+    // Neighbor Solicitation
+    ping -> is_in_cache
+    is_in_cache -> nd_cache[dir=both]
+    is_in_cache -> is_stale[label="Yes"]
+    is_in_cache -> fetch_ll_addr[label="No"]
+    is_stale -> fetch_ll_addr[label="Yes"]
+    is_stale -> use_cached_addr[label="No"]
+
+    // Neighbor Advertisement
+    recv_na -> na_valid
+    na_valid -> discard_advert[label="No"]
+    na_valid -> update[label="Yes"]
+    update -> nd_cache
+}
