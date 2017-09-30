@@ -44,7 +44,7 @@
                     <font size="6em">
                         <h1>Sylkie</h1>
                     </font>
-                    <small><i>/selkee/</i></small>
+                    <small><i>/sel-kee/</i></small>
                     <p>
                         Spoofing IPv6 addresses with Neighbor Discovery
                     </p>
@@ -65,6 +65,10 @@
                     <ul>
                         <li>Seemed like a good way to learn</li>
                         <li>No known tool in existence</li>
+                        <ul>
+                            <li>Legitimate use cases for address spoofing</li>
+                            <li>Testing</li>
+                        </ul>
                         <li>Intention to write a Router Advert Daemon that implements <a href="https://tools.ietf.org/html/rfc3971">RFC 3971</a></li>
                     </ul>
                 </section>
@@ -75,11 +79,9 @@
                         <p>
                             I am <u>not</u> an expert
                         </p>
-                        <span class="fragment">
-                            <p>
-                                <img src="images/ireadtherfc.png" height="50%" width="50%" style="border: none"/>
-                            </p>
-                        </span>
+                        <p>
+                            <img src="images/ireadtherfc.png" height="50%" width="50%" style="border: none"/>
+                        </p>
                     </section>
                     <section>
                         <p>
@@ -101,33 +103,24 @@ Date:   Sun Jun 18 04:15:41 2017 +0000
                 </section>
 
                 <section>
+                    <h2>A brief look at history</h2>
+                </section>
+
+                <section>
                     <section>
-                        <h4>Normative References</h4>
-                        <p>
-                            <ul>
-                                <li><a href="https://tools.ietf.org/html/rfc4861">RFC 4861</a> - Neighbor Discovery for IP version 6 (IPv6)</li>
-                                <li><a href="https://tools.ietf.org/html/rfc4443">RFC 4443</a> - Internet Control Message Protocol (ICMPv6)</li>
-                            </ul>
-                        </p>
+                        <h3>ARP</h3>
+                        <img src="graphs/images/arp-network.png" style="border: none"/>
                     </section>
                     <section>
-                        <h4>Informative References</h4>
-                        <p>
-                            <ul>
-                                <li><a href="https://tools.ietf.org/html/rfc4862">RFC 4862</a> - IPv6 Stateless Address Autoconfiguration</li>
-                                <li><a href="https://tools.ietf.org/html/rfc3971">RFC 3971</a> - SEcure Neighbor Discovery (SEND)</li>
-                                <li><a href="https://tools.ietf.org/html/rfc4291">RFC 4291</a> - IP Version 6 Addressing Architecture</li>
-                            </ul>
-                        </p>
+                        <h3>ARP Spoofing</h3>
+                        <img src="graphs/images/arp-spoof.png" style="border: none"/>
                     </section>
                     <section>
-                        <h4>Practical References</h4>
-                        <p>
-                            <ul>
-                                <li><a href="https://www.wireshark.org">wireshark</a></li>
-                                <li><a href="http://www.tcpdump.org">tcpdump</a></li>
-                            </ul>
-                        </p>
+                        <h3>What is wrong?</h3>
+                        <ul>
+                            <li>Every machine on the LAN must examine every ARP request</li>
+                            <li>Stateless</li>
+                        </ul>
                     </section>
                 </section>
 
@@ -309,6 +302,37 @@ Internet Control Message Protocol v6
                     </section>
                     <section>
                         <img src="graphs/images/ndp-ura-attack2.png" style="border: none"/>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h4>Normative References</h4>
+                        <p>
+                            <ul>
+                                <li><a href="https://tools.ietf.org/html/rfc4861">RFC 4861</a> - Neighbor Discovery for IP version 6 (IPv6)</li>
+                                <li><a href="https://tools.ietf.org/html/rfc4443">RFC 4443</a> - Internet Control Message Protocol (ICMPv6)</li>
+                            </ul>
+                        </p>
+                    </section>
+                    <section>
+                        <h4>Informative References</h4>
+                        <p>
+                            <ul>
+                                <li><a href="https://tools.ietf.org/html/rfc4862">RFC 4862</a> - IPv6 Stateless Address Autoconfiguration</li>
+                                <li><a href="https://tools.ietf.org/html/rfc3971">RFC 3971</a> - SEcure Neighbor Discovery (SEND)</li>
+                                <li><a href="https://tools.ietf.org/html/rfc4291">RFC 4291</a> - IP Version 6 Addressing Architecture</li>
+                            </ul>
+                        </p>
+                    </section>
+                    <section>
+                        <h4>Practical References</h4>
+                        <p>
+                            <ul>
+                                <li><a href="https://www.wireshark.org">wireshark</a></li>
+                                <li><a href="http://www.tcpdump.org">tcpdump</a></li>
+                            </ul>
+                        </p>
                     </section>
                 </section>
 

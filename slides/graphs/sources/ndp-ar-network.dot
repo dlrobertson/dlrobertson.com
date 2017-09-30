@@ -6,7 +6,7 @@ digraph ARN {
     fontcolor="#aa2233"
     fontsize=20
     bgcolor="#222222"
-    edge[color="#aa2233", fontcolor="#aa2233", fontsize=20]
+    edge[color="#b58900", fontcolor="#aa2233", fontsize=20]
     node[fontcolor="#aa2233", fontsize=20]
     solicited_node[
         label="Solicited Node Multicast Address\nff02::1:fffe:9720"

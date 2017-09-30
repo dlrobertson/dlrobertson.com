@@ -7,17 +7,8 @@ digraph ARH {
     fontsize=20
     bgcolor="#222222"
     nodesep=0.5
-    edge[
-        color="#aa2233"
-        fontcolor="#aa2233"
-        fontsize=20
-    ]
-    node[
-        fontcolor="#aa2233"
-        fontsize=20
-        fillcolor="#eeeeee"
-        style=filled
-    ]
+    edge[color="#b58900" fontcolor="#aa2233" fontsize=20]
+    node[fontcolor="#aa2233" fontsize=20 fillcolor="#eeeeee" style=filled]
     nd_cache[
         label="Neighbor Cache"
         shape=oval

@@ -12,7 +12,9 @@ DOT_IMAGE_NAMES := \
 	ndp-ura-attack2.png \
 	ndp-ar-network.png \
 	ndp-ar-host.png \
-	ndp-ar-attack.png
+	ndp-ar-attack.png \
+	arp-network.png \
+	arp-spoof.png
 
 DOT_OUTPUT := $(addprefix $(IMAGE_DIR)/, $(DOT_IMAGE_NAMES))
 
