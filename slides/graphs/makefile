@@ -1,7 +1,12 @@
 SOURCE_DIR := sources
 IMAGE_DIR := images
 DOT := $(shell which dot)
-DOT_OUTPUT := $(addprefix $(IMAGE_DIR)/, cfg-simple.png cfg-threads.png)
+DOT_IMAGE_NAMES := \
+	cfg-simple.png \
+	cfg-threads.png \
+	pipeline-tm.png \
+	master-tm.png
+DOT_OUTPUT := $(addprefix $(IMAGE_DIR)/, $(DOT_IMAGE_NAMES))
 
 all: $(DOT_OUTPUT)
 
