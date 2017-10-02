@@ -482,8 +482,20 @@ Internet Control Message Protocol v6
                         <h3>Using sylkie</h3>
                     </section>
                     <section>
+                        <h3>Usage</h3>
+                        <ul>
+                            <li>Command Line Tool</li>
+                            <ul>
+                                <li>Two basic subcommands</li>
+                                <li>Two options to streamline typical workflow</li>
+                            </ul>
+                            <li>C Library</li>
+                        </ul>
+                    </section>
+                    <section>
                         <h5>Neighbor Advert</h5>
-                        <font size='6'><pre><code>sylkie na -i &ltinterface&gt \
+                        <font size='6'><pre><code>sylkie neighbor-advert \
+    -interface &ltinterface&gt \
     --dst-mac &ltdest hw addr&gt \
     --src-ip &ltsource ip&gt \
     --dst-ip &ltdest ip address&gt \
@@ -492,7 +504,8 @@ Internet Control Message Protocol v6
     --timeout &lttime betweeen adverts&gt \
     --repeat &ltnumber of times to send the request&gt</code></pre></font>
                         <h5>Router Advert</h5>
-                         <font size='6'><pre><code>sylkie ra -i &ltiterface&gt \
+                         <font size='6'><pre><code>sylkie router-advert \
+    --interface &ltiterface&gt \
     --target-mac &lttarget mac&gt \
     --router-ip &lttarget ip&gt \
     --prefix &ltprefix&gt \
@@ -529,6 +542,14 @@ Internet Control Message Protocol v6
     ]
 }</pre></code>
                         </font>
+                    </section>
+                    <section>
+                        <h3>How we did it?</h3>
+                        <ul>
+                            <li><a href="http://man7.org/linux/man-pages/man7/raw.7.html">Linux raw sockets</a></li>
+                            <li><a href="https://github.com/seccomp/libseccomp">libseccomp</a></li>
+                            <li><a href="https://github.com/json-c/json-c">json-c</a></li>
+                        </ul>
                     </section>
                 </section>
 
@@ -567,6 +588,12 @@ Internet Control Message Protocol v6
                     <font size="6em">
                         <h1>THE END</h1>
                     </font>
+                    <br>
+                    <small>
+                        <p><a href="http://sylkie.io/docs">Documentation</a></p>
+                        <p><a href="https://github.com/dlrobertson/sylkie">GitHub</a></p>
+                        <p><a href="https://github.com/dlrobertson/sylkie/wiki">Wiki</a></p>
+                    </small>
                 </section>
             </div>
         </div>

@@ -29,7 +29,7 @@ digraph URAAttack2 {
         ]
     }
     all_nodes[
-        label="All Link-Local Nodes (ff02::1)"
+        label="All Link-Local Nodes\nff02::1"
         style=filled
         color=none
         fillcolor="#eeeeee"
