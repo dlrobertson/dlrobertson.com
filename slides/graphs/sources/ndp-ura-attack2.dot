@@ -53,11 +53,11 @@ digraph URAAttack2 {
     }
     router0 -> all_nodes[label="Router Advertisement"]
     attacker -> all_nodes[
-        label="Spoofed Advert from Router #0\nw/ Lifetime of 0"
+        label="Spoofed Advert\nfrom Router #0\nw/ Lifetime of 0"
         color="#aa2233"
     ]
     attacker -> all_nodes[
-        label="Valid Advert from Self"
+        label="Valid Advert\nfrom Self"
         color="#aa2233"
     ]
     all_nodes -> node0

@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>Sylkie - Spoofing IPv6 Addresses</title>
+
+        <meta name="description" content="A short talk about sylkie">
+        <meta name="author" content="Dan Robertson">
+
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="reveal.js/css/reveal.css">
+        <link rel="stylesheet" href="reveal.js/css/theme/blood.css" id="theme">
+
+        <link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
+
+<style>
+@media print {
+    .slide-background {
+        background-color: #222 !important;
+        -webkit-print-color-adjust: exact;
+    }
+}
+</style>
+        <script>
+            var link = document.createElement( 'link' );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = window.location.search.match( /print-pdf/gi ) ? 'reveal.js/css/print/pdf.css' : 'reveal.js/css/print/paper.css';
+            document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+
+    </head>
+
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section>
+                    <font size="6em">
+                        <h1>Sylkie</h1>
+                    </font>
+                    <small><i>/sel-kee/</i></small>
+                    <p>
+                        Spoofing IPv6 addresses with Neighbor Discovery
+                    </p>
+                    <p>
+                        <small><a href="http://sylkie.io">sylkie</a> / <a href="https://github.com/dlrobertson/sylkie">GitHub</a></small>
+                        <br>
+                        <small>Created by <a href="http://danrobertson.org">Dan Robertson</a> / <a href="http://github.com/dlrobertson">GitHub</a></small>
+                    </p>
+                </section>
+
+                <section>
+                    A command line tool and library for IPv6 address spoofing techniques using the Neighbor Discovery Protocol.
+                </section>
+
+                <section>
+                    <h3>Why?</h3>
+                    <ul>
+                        <li>Seemed like a good way to learn</li>
+                        <li>No known tool in existence</li>
+                        <ul>
+                            <li>Legitimate use cases for address spoofing</li>
+                            <li>Testing</li>
+                        </ul>
+                        <li>Intention to write a Router Advert Daemon that implements <a href="https://tools.ietf.org/html/rfc3971">RFC 3971</a></li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Disclaimers</h3>
+                    <section>
+                        <p>
+                            I am <u>not</u> an expert
+                        </p>
+                        <p>
+                            <img src="images/ireadtherfc.png" height="50%" width="50%" style="border: none"/>
+                        </p>
+                    </section>
+                    <section>
+                        <p>
+                            Project is still in the very early phase of development.
+                        </p>
+                        <br>
+                        <p>
+                            <pre><code>
+commit 05c1f44ad0b0c63839a56ef2ffc73b08c69cfb9c (tag: v0.0.1)
+Author: Dan Robertson &ltdan.robertson@anidata.org&gt
+Date:   Sun Jun 18 04:15:41 2017 +0000
+
+    Initial Commit - All the things!
+
+    Add all the things squashed up into one commit
+                            </code></pre>
+                        </p>
+                    </section>
+                </section>
+
+
+                <section>
+                    <section>
+                        <h2>A brief look at history</h2>
+                    </section>
+                    <section>
+                        <h3>ARP</h3>
+                        <img src="graphs/images/arp-network.png" style="border: none"/>
+                    </section>
+                    <section>
+                        <font size="6">
+                            <table style='font-family: "monospace"'>
+                                <tr>
+                                    <th>Host</th>
+                                    <th>IP Address</th>
+                                    <th>Link-layer Address</th>
+                                </tr>
+                                <tr>
+                                    <td>Node #0</td>
+                                    <td>192.168.1.2</td>
+                                    <td>52:54:00:c2:a7:7c</td>
+                                </tr>
+                                <tr>
+                                    <td>Node #1</td>
+                                    <td>192.168.1.3</td>
+                                    <td>52:54:00:e3:f4:06</td>
+                                </tr>
+                                <tr>
+                                    <td>Attacker</td>
+                                    <td>192.168.1.3</td>
+                                    <td>00:16:3e:87:7f:3c</td>
+                                </tr>
+                            </table>
+                        </font>
+                    </section>
+                    <section>
+                        <h3>ARP Spoofing</h3>
+                        <img src="graphs/images/arp-spoof.png" style="border: none"/>
+                    </section>
+                    <section>
+                        <ul>
+                            <li>Every machine on the LAN must examine every ARP request</li>
+                            <li>Possible for attackers to be off-link</li>
+                            <li>Stateless</li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>IPv6 and Neighbor Discovery</h2>
+                    </section>
+                </section>
+
+                <section>
+                    <h4>How does it improve on ARP?</h4>
+                    <ul>
+                        <li>More features</li>
+                        <li>On-link communication only</li>
+                        <li>Every machine on the LAN <b>does not</b> examine every request</li>
+                        <li>Builds on an existing protocol (ICMPv6)</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Multicast Addresses</h3>
+                        <font size='6'><pre><code>
+|   8    |  4 |  4 |                  112 bits                   |
++------ -+----+----+---------------------------------------------+
+|11111111|flgs|scop|                  group ID                   |
++--------+----+----+---------------------------------------------+
+                        </code></pre></font>
+                    </section>
+                    <section>
+                        <span style="text-align: left;">
+                        <blockquote cite="https://tools.ietf.org/html/rfc4291#section-2.7">
+                            An IPv6 multicast address is an identifier for a group of interfaces
+                            (typically on different nodes).  An interface may belong to any
+                            number of multicast groups.
+                        </blockquote>
+                    </section>
+                    <section>
+                        <table style='font-family: "monospace"'>
+                            <font size="6">
+                                <tr>
+                                    <th><b>Address</b></th>
+                                    <th><b>Group</b></th>
+                                </tr>
+                                <tr>
+                                    <td>ff02::1</td>
+                                    <td>All Nodes</td>
+                                </tr>
+                                <tr>
+                                    <td>ff02::2</td>
+                                    <td>All Routers</td>
+                                </tr>
+                            </font>
+                        </table>
+                    </section>
+                    <section>
+                        <font size='6'><pre><code>
+|   8    |  4 |  4 |                  112 bits                   |
++------ -+----+----+---------------------------------------------+
+|11111111|flgs|scop|                  group ID                   |
++--------+----+----+---------------------------------------------+
+                        </code></pre></font>
+                        <span class="fragment"><table style='font-family: "monospace"'>
+                            <font size="6">
+                                <tr>
+                                    <th>Address</th>
+                                    <th>Multicast</th>
+                                    <th>Flags</th>
+                                    <th>Scope</th>
+                                    <th>Group</th>
+                                </tr>
+                                <tr>
+                                    <tr>
+                                        <td rowspan="2">ff02::1</td>
+                                        <td rowspan="2">ff</td>
+                                        <td>0</td>
+                                        <td>2</td>
+                                        <td>1</td>
+                                    </tr>
+                                    <tr>
+                                        <td>None</td>
+                                        <td>Link-Local</td>
+                                        <td>All-Nodes</td>
+                                    </tr>
+                                </tr>
+                                <tr>
+                                    <tr>
+                                        <td rowspan="2">ff02::2</td>
+                                        <th rowspan="2">ff</th>
+                                        <th>0</th>
+                                        <th>2</th>
+                                        <th>2</th>
+                                    </tr>
+                                    <tr>
+                                        <td>None</td>
+                                        <td>Link-Local</td>
+                                        <td>All-Routers</td>
+                                    </tr>
+                                </tr>
+                                <tr>
+                                </tr>
+                            </font>
+                        </table></span>
+                    </section>
+                    <section>
+                        <h3>Solicited-Node Address</h3>
+                        <blockquote cite="https://tools.ietf.org/html/rfc4291#section-2.7.1">
+                            A Solicited-Node multicast address is formed by taking the low-order
+                            24 bits of an address (unicast or anycast) and appending those bits
+                            to the prefix ff02:0000:0000:0000:0000:0001:ff
+                        </blockquote>
+                    </section>
+                    <section>
+                        <font family="monospace">
+                            fe80:0000:0000:0000:b95b:0ee1:cafe:9720
+                        </font>
+                    </section>
+                    <section>
+                        <table style='font-family: "monospace"'>
+                            <font size="6">
+                                <tr>
+                                    <td></td>
+                                    <td>fe80:0000:0000:0000:b95b:0ee1:cafe:9720</td>
+                                </tr>
+                                <tr>
+                                    <td>&amp</td>
+                                    <td>0000:0000:0000:0000:0000:0000:00ff:ffff</td>
+                                </tr>
+                                <tr>
+                                    <td>=</td>
+                                    <td>0000:0000:0000:0000:0000:0000:00fe:9729</td>
+                                </tr>
+                            </font>
+                        </table>
+                        <br>
+                        <span class="fragment"><table style='font-family: "monospace"'>
+                            <font size="6">
+                                <tr>
+                                    <td></td>
+                                    <td>ff02:0000:0000:0000:0000:0001:ff00:0000</td>
+                                </tr>
+                                <tr>
+                                    <td>|</td>
+                                    <td>0000:0000:0000:0000:0000:0000:00fe:9729</td>
+                                </tr>
+                                <tr>
+                                    <td>=</td>
+                                    <td>ff02:0000:0000:0000:0000:0001:fffe:9729</td>
+                                </tr>
+                            </font>
+                        </table></span>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Protocol Goals</h3>
+                        <ul>
+                            <li data-fragment-index="1" class="fragment grow">Router Discovery</li>
+                            <li data-fragment-index="1" class="fragment fade-out">Prefix Discovery</li>
+                            <li data-fragment-index="1" class="fragment fade-out">Parameter Discovery</li>
+                            <li data-fragment-index="1" class="fragment fade-out">Address Autoconfiguration</li>
+                            <li data-fragment-index="1" class="fragment grow">Address Resolution</li>
+                            <li data-fragment-index="1" class="fragment fade-out">Next-hop Determination</li>
+                            <li data-fragment-index="1" class="fragment grow highlight-red">Neighbor Unreachability Detection</li>
+                            <li data-fragment-index="1" class="fragment fade-out">Duplicate Address Detection</li>
+                            <li data-fragment-index="1" class="fragment fade-out">Redirect</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Five Message Types</h3>
+                        <ul>
+                            <li data-fragment-index="1" class="fragment grow">Router Advertisement</li>
+                            <li data-fragment-index="1" class="fragment shrink highlight-red">Router Solicitation</li>
+                            <li data-fragment-index="1" class="fragment grow">Neighbor Advertisement</li>
+                            <li data-fragment-index="1" class="fragment shrink highlight-red">Neighbor Solicitation</li>
+                            <li data-fragment-index="1" class="fragment fade-out">Redirect</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Message Options</h3>
+                        <ul>
+                            <li data-fragment-index="1">Source Link-layer Address</li>
+                            <li data-fragment-index="1">Target Link-layer Address</li>
+                            <li data-fragment-index="1">Prefix Information</li>
+                            <li data-fragment-index="1" class="fragment fade-out">Redirected Header</li>
+                            <li data-fragment-index="1" class="fragment fade-out">MTU</li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section>
+                    <h3>Address Resolution</h3>
+                </section>
+
+                <section>
+                    <h3>Neighbor Advert/Solicit</h3>
+                    <img src="graphs/images/ndp-ar-network.png" style="border: none"/>
+                </section>
+
+                <section>
+                    <h3>Neighbor Cache</h3>
+                    <img src="graphs/images/ndp-ar-host.png" style="border: none"/>
+                </section>
+
+                <section>
+                    <h3>Neighbor Cache Poisoning</h3>
+                    <section>
+                        Keep the cache entry on Node #0 for Node #1
+                        consistently updated to the Link-layer address
+                        of the attacker.
+                    </section>
+                    <section>
+                        <font size="6">
+                            <table style='font-family: "monospace"'>
+                                <tr>
+                                    <th>Host</th>
+                                    <th>IPv6 Address</th>
+                                    <th>Link-layer Address</th>
+                                </tr>
+                                <tr>
+                                    <td>Node #0</td>
+                                    <td>fe80::cbed:6822:cd23:bbdb</td>
+                                    <td>52:54:00:c2:a7:7c</td>
+                                </tr>
+                                <tr>
+                                    <td>Node #1</td>
+                                    <td>fe80::b95b:0ee1:cafe:9720</td>
+                                    <td>52:54:00:e3:f4:06</td>
+                                </tr>
+                                <tr>
+                                    <td>Attacker</td>
+                                    <td>fe80::0216:3eff:fe87:7f3c</td>
+                                    <td>00:16:3e:87:7f:3c</td>
+                                </tr>
+                            </table>
+                        </font>
+                    </section>
+                    <section>
+                        <img src="graphs/images/ndp-ar-attack.png" style="border: none"/>
+                    </section>
+                    <section>
+                        Forged Packet to Send to Node #0
+                        <font size='6'><pre><code>Ethernet II, Src: Xensourc_87:7f:3c (00:16:3e:87:7f:3c), Dst: RealtekU_c2:a7:7c (52:54:00:c2:a7:7c)
+Internet Protocol Version 6, Src: fe80::b95b:ee1:cafe:9720, Dst: fe80::cbed:6822:cd23:bbdb
+Internet Control Message Protocol v6
+    Type: Neighbor Advertisement (136)
+    Code: 0
+    Checksum: 0x8a7f [correct]
+    [Checksum Status: Good]
+    Flags: 0x20000000, Override
+        0... .... .... .... .... .... .... .... = Router: Not set
+        .0.. .... .... .... .... .... .... .... = Solicited: Not set
+        ..1. .... .... .... .... .... .... .... = Override: Set
+        ...0 0000 0000 0000 0000 0000 0000 0000 = Reserved: 0
+    Target Address: fe80::b95b:ee1:cafe:9720
+    ICMPv6 Option (Target link-layer address : 00:16:3e:87:7f:3c)
+        Type: Target link-layer address (2)
+        Length: 1 (8 bytes)
+        Link-layer address: Xensourc_87:7f:3c (00:16:3e:87:7f:3c)</pre></code></font>
+                    </section>
+                </section>
+
+                <section>
+                    <h3>Router Discovery</h3>
+                </section>
+
+                <section>
+                    <h4>Active Aquisition of the Default Route</h4>
+                    <img src="graphs/images/ndp-sra.png" style="border: none"/>
+                </section>
+
+                <section>
+                    <h4>Passive Aquisition of the Default Route</h4>
+                    <img src="graphs/images/ndp-ura.png" style="border: none"/>
+                </section>
+
+                <section>
+                    <h4>Hijacking the Default Route</h4>
+                    <section>
+                        <blockquote cite="https://tools.ietf.org/html/rfc4861#section-6.3.5">
+                            Whenever the Lifetime of an entry in the Default Router List expires,
+                            that entry is discarded.
+                        </blockquote>
+                    </section>
+                    <section>
+                        <img src="graphs/images/ndp-ura-attack1.png" style="border: none"/>
+                    </section>
+                    <section>
+                        Forged Router Advertisement
+                        <font size='6'><pre><code>Ethernet II, Src: RealtekU_c2:a7:7c (52:54:00:c2:a7:7c), Dst: IPv6mcast_01 (33:33:00:00:00:01)
+Internet Protocol Version 6, Src: fe80::cbed:6822:cd23:bbdb, Dst: ff02::1
+Internet Control Message Protocol v6
+    Type: Router Advertisement (134)
+    Code: 0
+    Checksum: 0xc5ce [correct]
+    [Checksum Status: Good]
+    Cur hop limit: 255
+    Flags: 0x00, Prf (Default Router Preference): Medium
+        0... .... = Managed address configuration: Not set
+        .0.. .... = Other configuration: Not set
+        ..0. .... = Home Agent: Not set
+        ...0 0... = Prf (Default Router Preference): Medium (0)
+        .... .0.. = Proxy: Not set
+        .... ..0. = Reserved: 0
+    Router lifetime (s): 0
+    Reachable time (ms): 0
+    Retrans timer (ms): 0
+    ICMPv6 Option (Prefix information : fe80::cbed:6822:cd23:bbdb/64)
+        Type: Prefix information (3)
+        Length: 4 (32 bytes)
+        Prefix Length: 64
+        Flag: 0x00
+            0... .... = On-link flag(L): Not set
+            .0.. .... = Autonomous address-configuration flag(A): Not set
+            ..0. .... = Router address flag(R): Not set
+            ...0 0000 = Reserved: 0
+        Valid Lifetime: 0
+        Preferred Lifetime: 0
+        Reserved
+        Prefix: fe80::cbed:6822:cd23:bbdb
+    ICMPv6 Option (Source link-layer address : 52:54:00:c2:a7:7c)
+        Type: Source link-layer address (1)
+        Length: 1 (8 bytes)
+        Link-layer address: RealtekU_c2:a7:7c (52:54:00:c2:a7:7c)</code></pre></font>
+                    </section>
+                    <section>
+                        <img src="graphs/images/ndp-ura-attack2.png" style="border: none"/>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Using sylkie</h3>
+                    </section>
+                    <section>
+                        <h5>Neighbor Advert</h5>
+                        <font size='6'><pre><code>sylkie na -i &ltinterface&gt \
+    --dst-mac &ltdest hw addr&gt \
+    --src-ip &ltsource ip&gt \
+    --dst-ip &ltdest ip address&gt \
+    --target-ip &lttarget ip address&gt \
+    --target-mac &lttarget mac address&gt \
+    --timeout &lttime betweeen adverts&gt \
+    --repeat &ltnumber of times to send the request&gt</code></pre></font>
+                        <h5>Router Advert</h5>
+                         <font size='6'><pre><code>sylkie ra -i &ltiterface&gt \
+    --target-mac &lttarget mac&gt \
+    --router-ip &lttarget ip&gt \
+    --prefix &ltprefix&gt \
+    --timeout &lttime betweeen adverts&gt \
+    --repeat &ltnumber of times to send the request&gt</code></pre></font>
+                    </section>
+                    <section>
+                        <img src="images/ron-computer-toss.gif" style="border: none"/>
+                    </section>
+                    <section>
+                        <h5 style="text-align: left;">We accept JSON!</h5>
+                        <font size='6'>
+                            <pre style="width: 25%;"><code>sylkie -j &lt/path/to/json&gt</code></pre>
+                            <pre><code>{
+    "router-advert": [
+        {
+            "interface": "&ltinterface&gt",
+            "target-mac": "&lttarget mac&gt",
+            "router-ip": "&ltrouter ip&gt",
+            "prefix": &ltprefix&gt,
+            "timeout": &ltnumber of times to send the request&gt,
+        }
+    ],
+    "neighbor-advert": [
+        {
+            "interface": "&ltinterface&gt",
+            "dst-mac": "&ltdest hw addr&gt",
+            "src-ip": "&ltsource ip&gt",
+            "dst-ip": "&ltdest ip address&gt",
+            "target-mac": "&lttarget mac address&gt",
+            "target-ip": "&lttarget ip address&gt",
+            "timeout": &lttime betweeen adverts&gt,
+        }
+    ]
+}</pre></code>
+                        </font>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h4>Normative References</h4>
+                        <p>
+                            <ul>
+                                <li><a href="https://tools.ietf.org/html/rfc4861">RFC 4861</a> - Neighbor Discovery for IP version 6 (IPv6)</li>
+                                <li><a href="https://tools.ietf.org/html/rfc4443">RFC 4443</a> - Internet Control Message Protocol (ICMPv6)</li>
+                            </ul>
+                        </p>
+                    </section>
+                    <section>
+                        <h4>Informative References</h4>
+                        <p>
+                            <ul>
+                                <li><a href="https://tools.ietf.org/html/rfc4862">RFC 4862</a> - IPv6 Stateless Address Autoconfiguration</li>
+                                <li><a href="https://tools.ietf.org/html/rfc3971">RFC 3971</a> - SEcure Neighbor Discovery (SEND)</li>
+                                <li><a href="https://tools.ietf.org/html/rfc4291">RFC 4291</a> - IP Version 6 Addressing Architecture</li>
+                            </ul>
+                        </p>
+                    </section>
+                    <section>
+                        <h4>Practical References</h4>
+                        <p>
+                            <ul>
+                                <li><a href="https://www.wireshark.org">wireshark</a></li>
+                                <li><a href="http://www.tcpdump.org">tcpdump</a></li>
+                            </ul>
+                        </p>
+                    </section>
+                </section>
+
+                <section style="text-align: left;">
+                    <font size="6em">
+                        <h1>THE END</h1>
+                    </font>
+                </section>
+            </div>
+        </div>
+
+        <script src="reveal.js/lib/js/head.min.js"></script>
+        <script src="reveal.js/js/reveal.js"></script>
+
+        <script>
+
+            // More info https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+                // More info https://github.com/hakimel/reveal.js#dependencies
+                dependencies: [
+                    { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true },
+                    { src: 'reveal.js/plugin/notes/notes.js', async: true }
+                ]
+            });
+
+        </script>
+
+    </body>
+</html>

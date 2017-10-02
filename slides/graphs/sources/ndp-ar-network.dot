@@ -25,7 +25,13 @@ digraph ARN {
         color=none
         fillcolor="#eeeeee"
     ]
-    node0 -> solicited_node[label="Neighbor Solicitation"]
-    solicited_node -> node1
-    node1 ->node0[label="Neighbor Advertisement"]
+    node2[
+        label="Node #1\nip: fe80::0216:3eff:fe87:7f3c\nmac: 00:16:3e:87:7f:3c"
+        style=filled
+        color=none
+        fillcolor="#eeeeee"
+    ]
+    node0 -> solicited_node[label="1\nNeighbor Solicitation\nfor fe80::b95b:0ee1:cafe:9720"]
+    solicited_node -> node1[label="2"]
+    node1 ->node0[label="3\nNeighbor Advertisement\nfor fe80::b95b:0ee1:cafe:9720"]
 }

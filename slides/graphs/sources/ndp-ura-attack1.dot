@@ -29,7 +29,7 @@ digraph URAAttack1 {
         ]
     }
     all_nodes[
-        label="All Link-Local Nodes (ff02::1)"
+        label="All Link-Local Nodes\nff02::1"
         style=filled
         color=none
         fillcolor="#eeeeee"
@@ -51,9 +51,9 @@ digraph URAAttack1 {
             fillcolor="#eeeeee"
         ]
     }
-    router0 -> all_nodes[label="Router Advertisement"]
+    router0 -> all_nodes[label="Router Advertisement\nfor Router #0"]
     attacker -> all_nodes[
-        label="Spoofed Advert from Router #0\nw/ Lifetime of 0"
+        label="Spoofed Advert\nfrom Router #0\nw/ Lifetime of 0"
         color="#aa2233"
     ]
     all_nodes -> node0

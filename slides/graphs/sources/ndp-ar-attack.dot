@@ -9,13 +9,13 @@ digraph ARN {
     edge[color="#b58900", fontcolor="#aa2233", fontsize=20]
     node[fontcolor="#aa2233", fontsize=20]
     node0[
-        label="Client A\nip: fe80::cbed:6822:cd23:bbdb\nmac: 52:54:00:c2:a7:7c"
+        label="Node #0\nip: fe80::cbed:6822:cd23:bbdb\nmac: 52:54:00:c2:a7:7c"
         style=filled
         color=none
         fillcolor="#eeeeee"
     ]
     node1[
-        label="Client B\nip: fe80::b95b:0ee1:cafe:9720\nmac: 52:54:00:e3:f4:06"
+        label="Node #1\nip: fe80::b95b:0ee1:cafe:9720\nmac: 52:54:00:e3:f4:06"
         style=filled
         color=none
         fillcolor="#eeeeee"
@@ -28,11 +28,11 @@ digraph ARN {
     ]
     node0 -> node1[label="Route to spoof", dir=both]
     node3 -> node0[
-        label="Neighbor Advertisement"
+        label="Neighbor Advertisement\nfor fe80::b95b:0ee1:cafe:9720"
         color="#aa2233"
     ]
     node3 -> node1[
-        label="Neighbor Advertisement"
+        label="Neighbor Advertisement\nfor fe80::0216:3eff:fe87:7f3c"
         color="#aa2233"
     ]
 }

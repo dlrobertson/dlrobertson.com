@@ -26,7 +26,7 @@ digraph SRA {
         ]
     }
     all_routers[
-        label="All Link-Local Routers (ff02::2)"
+        label="All Link-Local Routers\nff02::2"
         style=filled
         color=none
         fillcolor="#eeeeee"
@@ -42,9 +42,9 @@ digraph SRA {
             fillcolor="#eeeeee"
         ]
     }
-    node0 -> all_routers[label="Router Solicitation"]
-    all_routers -> router0
-    all_routers -> router1
-    router0 -> node0[label="Router Advertisement"]
-    router1 -> node0[label="Router Advertisement"]
+    node0 -> all_routers[label="1\nRouter Solicitation"]
+    all_routers -> router0[label="2"]
+    all_routers -> router1[label="2"]
+    router0 -> node0[label="3\nRouter Advertisement\nfor Router #0"]
+    router1 -> node0[label="3\nRouter Advertisement\nfor Router #1"]
 }

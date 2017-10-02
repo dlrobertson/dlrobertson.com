@@ -20,7 +20,7 @@ digraph URA {
         ]
     }
     all_nodes[
-        label="All Link-Local Nodes (ff02::1)"
+        label="All Link-Local Nodes\nff02::1"
         style=filled
         color=none
         fillcolor="#eeeeee"
@@ -42,7 +42,7 @@ digraph URA {
             fillcolor="#eeeeee"
         ]
     }
-    router0 -> all_nodes[label="Router Advertisement"]
-    all_nodes -> node0
-    all_nodes -> node1
+    router0 -> all_nodes[label="1\nRouter Advertisement\nfor Router #0"]
+    all_nodes -> node0[label="2"]
+    all_nodes -> node1[label="2"]
 }
