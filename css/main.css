@@ -127,7 +127,7 @@ div#main > #article {
     align-items: center;
 }
 
-#nav > div#nav-list {
+div.nav-list {
     align-self: center;
     display: flex;
     max-width: 150px;
