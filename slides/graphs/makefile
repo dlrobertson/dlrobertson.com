@@ -2,10 +2,6 @@ SOURCE_DIR := sources
 IMAGE_DIR := images
 DOT := $(shell which dot)
 DOT_IMAGE_NAMES := \
-	cfg-simple.png \
-	cfg-threads.png \
-	pipeline-tm.png \
-	master-tm.png \
 	ndp-sra.png \
 	ndp-ura.png \
 	ndp-ura-attack1.png \
