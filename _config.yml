@@ -6,10 +6,9 @@ baseurl: ""
 
 #  Build settings
 permalink: "/blog/:categories/:year/:month/:day/:title.html"
-paginate_path: "/blog/page:num"
-paginate: 3
+highlighter: rouge
 
-gems:
+plugins:
   - jekyll-redirect-from
   - jekyll-paginate
 
