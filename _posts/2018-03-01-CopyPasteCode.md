@@ -1,7 +1,7 @@
 ---
 layout:   post
 type:     blog
-title:    Copy Paste Code Rears it's Ugly Head
+title:    Copy Paste Code Strikes Again
 date:     2018-03-01
 summary:  Some recent experiences I've had with copy-paste code
 ---
