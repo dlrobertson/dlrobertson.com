@@ -53,4 +53,4 @@ X-Amz-Cf-Id: AWxLrvL00vf7aJ1H7O6pwZ46QOvbobPf2rdTnfeK1_8tCBxRAlr7iA==
 -->
 ```
 
-[time.com]: time.com
+[time.com]: https://time.com
