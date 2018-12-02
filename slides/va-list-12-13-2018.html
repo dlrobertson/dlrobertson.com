@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>va_list's in Rust</title>
+
+        <meta name="description" content="A short talk about sylkie">
+        <meta name="author" content="Dan Robertson">
+
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="reveal.js/css/reveal.css">
+        <link rel="stylesheet" href="reveal.js/css/theme/blood.css" id="theme">
+
+        <link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
+
+<style>
+@media print {
+    .slide-background {
+        background-color: #222 !important;
+        -webkit-print-color-adjust: exact;
+    }
+}
+</style>
+        <script>
+            var link = document.createElement( 'link' );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = window.location.search.match( /print-pdf/gi ) ? 'reveal.js/css/print/pdf.css' : 'reveal.js/css/print/paper.css';
+            document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+        <style>
+.split-container {
+    display: flex;
+}
+.col {
+    flex: 1;
+}
+        </style>
+
+    </head>
+
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section>
+                    <font size="6em">
+                        <span><h1><code>va_list</code></h1><h3>in</h3><h2>Rust</h2></span>
+                    </font>
+                    <p>
+                        Using C's <code>va_list</code> in Rust
+                        <br>
+                        <small>(and why you never should)</small>
+                    </p>
+                    <p>
+                        <small><a href="https://beta.rust-lang.org/">rust</a> / <a href="https://github.com/rust-lang/rust">GitHub</a></small>
+                        <br>
+                        <small>Created by <a href="http://dlrobertson.com">Dan Robertson</a> / <a href="http://github.com/dlrobertson">GitHub</a></small>
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Disclaimer</h3>
+
+                    Here there be C and <code>unsafe</code>
+                    <p>
+                        <img src="images/unsafe-rust.png" style="border:none"/>
+                    </p>
+                </section>
+
+                <section>
+                    <h2><code>va_list</code> basics</h3>
+                </section>
+
+                <section>
+                    <section>
+                        Type used as a parameter to retrieve a variable arguments
+                        passed to a function.
+                    </section>
+                    <section>
+                        <h3>The API</h3>
+                        <ul>
+                            <li>
+                                Declaired in the <code>stdarg.h</code> header.
+                            </li>
+                            <li class="fragment">
+                                <code>va_start()</code> - Used to initialize the list
+                            </li>
+                            <li class="fragment">
+                                <code>va_arg()</code> - Retrieve the next argument
+                                of the given type from the list
+                            </li>
+                            <li class="fragment">
+                                <code>va_end()</code> - End using the list
+                            </li>
+                            <li class="fragment">
+                                <code>va_copy()</code> - Copy the lists state to a new list
+                            </li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section>
+                    <h3>Example</h3>
+                    <section>
+                        Define the function <code>add_n</code> that will ruturn the sum
+                        of up to <code>n</code> integers passed to the function.
+                        <br>
+<pre><code class="hljs" data-trim contenteditable>
+    add_n(3, 10, 15, 17) == 42
+</code></pre>
+                    </section>
+
+                    <section>
+                        <div class="split-container">
+                            <div class="col">
+                                C
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+#include &ltstdarg.h&gt
+int add_n(int n, ...) {
+  // uninitialized va_list and
+  // other variables to be used.
+  va_list ap;
+  int ret = 0;
+
+  // Initialize the list and
+  // call the "real" add_n
+  va_start(ap, n);
+  ret = inner_add_n(n, ap);
+
+  // Cleanup and return
+  va_end(ap);
+  return ret;
+}
+</code></pre></font>
+                            </div>
+                            <div class="col fragment">
+                                C
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+// Worker function
+int inner_add_n(int n, va_list ap) {
+  int sum = 0;
+  // Loop n times and add the given
+  // argument of type int.
+  for (i = 0; i &lt n; ++i) {
+    sum += va_arg(ap, int);
+  }
+  return sum;
+}
+</code></pre></font>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+
+                <section>
+                    <h2><code>va_list</code> in Rust</h2>
+                </section>
+
+                <section>
+                    <h3>Why?</h3>
+                    <small>
+                        <blockquote cite="https://github.com/rust-lang/rfcs/blob/master/text/2137-variadic.md">
+                            Rust can currently call any possible C interface, and export almost any interface for C to call.
+                            Variadic functions represent one of the last remaining gaps in the latter.
+                        </blockquote>
+                    </small>
+                </section>
+
+                <section>
+                    <h3>Why not?</h3>
+                    <ul>
+                        <li class="fragment"><a href="https://cwe.mitre.org/data/definitions/234.html">CWE-134</a> - Format string vuln</li>
+                        <li class="fragment"><a href="https://cwe.mitre.org/data/definitions/234.html">CWE-234</a> - <code>va_arg</code> called too many times</li>
+                    </ul>
+                    <br>
+                    <span class="fragment">
+                        <br>
+                        <code>va_list</code>'s are VERY <code>unsafe</code>
+                    </span>
+                </section>
+
+                <section>
+                    <h3>Writing <code>add_n()</code> in Rust</h3>
+
+                    <section>
+                        <div class="split-container">
+                            <div class="col">
+                                C
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+#include &ltstdarg.h&gt
+int add_n(int n, ...) {
+  // uninitialized va_list and
+  // other variables to be used.
+  va_list ap;
+  int ret = 0;
+
+  // Initialize the list and
+  // call the "real" add_n
+  va_start(ap, n);
+  ret = inner_add_n(n, ap);
+
+  // Cleanup and return
+  va_end(ap);
+  return ret;
+}
+</code></pre></font>
+                            </div>
+                            <div class="col fragment">
+                                Rust
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+use std::ffi::VaList;
+
+// Worker function
+pub unsafe extern "C" fn inner_add_n(
+  n: c_int,
+  ap: VaList
+) -&gt c_int {
+  let mut sum = 0;
+  for i in 0..n {
+    sum += ap.arg::&ltc_int&gt()
+  }
+  sum
+}
+</code></pre></font>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <img src="images/kip-yes.gif" style="border:none"/>
+                    </section>
+                </section>
+
+                <section>
+                    <h3>The Rust Implementation</h3>
+
+                    <section>
+                        Heavily based on <a href="https://github.com/rust-lang/rfcs/blob/master/text/2137-variadic.md">RFC 2137</a>
+                    </section>
+
+                    <section>
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+/// The argument list of a C-compatible variadic function, corresponding to the
+/// underlying C `va_list`. Opaque.
+pub struct VaList&lt'a&gt(/* fields omitted */)
+
+// Note: the lifetime on VaList is invariant
+impl<'a> VaList<'a> {
+    /// Extract the next argument from the argument list. T must have a type
+    /// usable in an FFI interface.
+    pub unsafe fn arg&ltT&gt(&mut self) -&gt T;
+
+    /// Copy the argument list. Destroys the copy after the closure returns.
+    pub unsafe fn copy&ltF, R&gt(&mut self, f: F) -&gt R
+       where F: for&lt'copy&gt FnOnce(VaList&lt'copy&gt) -&gt R;
+}
+</code></pre></font>
+                    </section>
+
+                </section>
+
+                <section>
+                    <h4>Rust API considerations</h4>
+                    <section>
+                        <span>
+                            <small>
+                                <blockquote cite="C Standard">
+                                    The type of an argument in a variable argument
+                                    list will never be an integer type smaller than
+                                    int, nor will it ever be float.
+                                </blockquote>
+                            </small>
+                        </span>
+                        <div class="split-container">
+                            <div class="col fragment">
+                                C
+<pre><code class="hljs" data-trim contenteditable>
+  va_arg(ap, float);
+</code></pre>
+
+                                <small>
+                                    Result: garbage or program <code>abort()</code>
+                                </small>
+                                <br>
+                                <br>
+                                <small>
+                                    <span class="fragment">
+                                        Note: gcc and clang also throw a hefty warning
+                                    </span>
+                                </small>
+                            </div>
+
+                            <div class="col fragment">
+                                Rust
+<pre><code class="hljs" data-trim contenteditable>
+  ap.arg::&ltf32&gt();
+</code></pre>
+
+                                <small>
+                                    Result: Compiler Error
+                                </small>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <code>VaList</code> should not be able to escape the
+                        function.
+
+                        <p>
+                        <div class="split-container">
+                            <div class="col">
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+unsafe fn bad_idea(
+    fixed: u32,
+    mut ap: ...
+) -&gt VaList {
+    ap
+}
+</code></pre></font>
+                                <small>
+                                    Result: Compiler Error
+                                </small>
+                            </div>
+
+                            <div class="col fragment">
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+unsafe fn bad_idea(
+    mut ap: VaList
+) {
+    let new_copy = ap.copy(|mut ap| {
+        ap
+    });
+}
+</code></pre></font>
+                                <small>
+                                    Result: Compiler Error
+                                </small>
+                            </div>
+                        </div>
+                        </p>
+                    </section>
+
+                    <section>
+                        <small>
+                            <i>Note: Not yet implemented.</i>
+                        </small>
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+#![no_std]
+#![feature(c_variadic)]
+use core::ffi::VaList;
+
+#[no_mangle]
+pub unsafe extern "C" fn func(fixed: u32, mut ap: ...) {
+    let x: u8 = args.arg();
+    let y: u16 = args.arg();
+    let z: u32 = args.arg();
+    println!("{} {} {} {}", fixed, x, y, z);
+}
+</code></pre></font>
+
+                        <p>
+                            <code>va_start()</code> and <code>va_end()</code> injected
+                            automagically by compiler.
+                        </p>
+                    </section>
+                </section>
+
+                <section>
+                    <h2>The Gritty Details</h3>
+                    <img src="images/nitty-gritty.gif" style="border:none"/>
+                </section>
+
+                <section>
+                    <h3><code>va_list</code> implementations</h3>
+                    <section>
+                        Based on the CPU architecture the structure varies.
+                        <br>
+                        <br>
+                        <ul class="fragment">
+                            <li>
+                                Character/Void Pointer
+                            </li>
+                            <br>
+                            <li>
+                                x86_64 ABI
+                            </li>
+                            <br>
+                            <li>
+                                Aarch64
+                            </li>
+                            <br>
+                            <li>
+                                PowerPC
+                            </li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <div class="split-container">
+                            <div class="col">
+                                <p>
+                                    Enter Windows
+                                </p>
+                                <p class="fragment fade-up">
+                                    Windows is <b>always</b> Character/Void Pointer
+                                 </p>
+                            </div>
+                            <div class="col">
+                                <img src="images/gates-not-a-bug.jpg" style="border:none"/>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+
+                <section>
+                    <h3>A case-study</h3>
+                    <section data-transition="none">
+                        <p>
+                            <code>va_list ap</code> contains 10, (1LL &lt&lt 63)
+                        </p>
+                        <p>
+                            <h4>Memory Layout</h4>
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+     First Arg           Second Arg
+     type: int           type: long long
+     value: 10           value: 0x8000000000000000 (1 &lt&lt 63)
+     0xXXXXXXXXXX00      0xXXXXXXXXXX04
+    |                   |                                       |
+    |----|----|----|----|----|----|----|----|----|----|----|----|
+    |                   |                                       |
+     0x0a 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x80
+</code></pre></font>
+                        </p>
+                    </section>
+
+                    <section data-transition="none">
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+  let x = ap.arg::&lti32&gt(); // <--
+  let y = ap.arg::&lti64&gt();
+  let bad = ap.arg::&lti32&gt();
+</code></pre></font>
+
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+     First Arg           Second Arg
+     type: int           type: long long
+     value: 10           value: 0x8000000000000000 (1 &lt&lt 63)
+     0xXXXXXXXXXX00      0xXXXXXXXXXX04
+    |                   |                                       |
+    |----|----|----|----|----|----|----|----|----|----|----|----|
+    |                   |                                       |
+     0x0a 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x80
+    ^
+    |
+    location
+</code></pre></font>
+                    </section>
+
+                    <section data-transition="none">
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+  let x = ap.arg::&lti32&gt(); // x == 10
+  let y = ap.arg::&lti64&gt(); // <--
+  let bad = ap.arg::&lti32&gt();
+</code></pre></font>
+
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+     First Arg           Second Arg
+     type: int           type: long long
+     value: 10           value: 0x8000000000000000 (1 &lt&lt 63)
+     0xXXXXXXXXXX00      0xXXXXXXXXXX04
+    |                   |                                       |
+    |----|----|----|----|----|----|----|----|----|----|----|----|
+    |                   |                                       |
+     0x0a 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x80
+                        ^
+                        |
+                     location
+</code></pre></font>
+                    </section>
+
+                    <section data-transition="none">
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+  let x = ap.arg::&lti32&gt(); // x == 10
+  let y = ap.arg::&lti64&gt(); // y == 0x8000000000000000
+  let bad = ap.arg::&lti32&gt(); // <--
+</code></pre></font>
+
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+     First Arg           Second Arg
+     type: int           type: long long
+     value: 10           value: 0x8000000000000000 (1 &lt&lt 63)
+     0xXXXXXXXXXX00      0xXXXXXXXXXX04
+    |                   |                                       |
+    |----|----|----|----|----|----|----|----|----|----|----|----|
+    |                   |                                       |
+     0x0a 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x80
+                                                                ^
+                                                                |
+                                                             location
+</code></pre></font>
+                    </section>
+
+                    <section data-transition="none">
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+  let x = ap.arg::&lti32&gt(); // x == 10
+  let y = ap.arg::&lti64&gt(); // y == 0x8000000000000000
+  let bad = ap.arg::&lti32&gt(); // <-- OOB
+</code></pre></font>
+
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+     First Arg           Second Arg
+     type: int           type: long long
+     value: 10           value: 0x8000000000000000 (1 &lt&lt 63)
+     0xXXXXXXXXXX00      0xXXXXXXXXXX04                          0xXXXXXXXXXX0c
+    |                   |                                       |                   |
+    |----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|
+    |                   |                                       |                   |
+     0x0a 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x80         OOB
+                                                                                    ^
+                                                                                    |
+                                                                                 location
+</code></pre></font>
+                    </section>
+                </section>
+
+                <section>
+                    <h4>Mixing Types</h4>
+                    <section data-transition="none">
+                    Architecture: i686
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+  let x = ap.arg::&lti32&gt(); // x == 10
+  let y = ap.arg::&ltf64&gt(); // <--
+</code></pre></font>
+
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+    |                   |                                       |
+    |----|----|----|----|----|----|----|----|----|----|----|----|
+    |                   |                                       |
+     0x0a 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x80
+                        ^
+                        |
+                     location
+</code></pre></font>
+                    </section>
+                    <section data-transition="none">
+                    Architecture: i686
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+  let x = ap.arg::&lti32&gt(); // x == 10
+  let y = ap.arg::&ltf64&gt(); // y == -0.00
+</code></pre></font>
+
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+    |                   |                                       |
+    |----|----|----|----|----|----|----|----|----|----|----|----|
+    |                   |                                       |
+     0x0a 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x80
+                                                                ^
+                                                                |
+                                                             location
+</code></pre></font>
+                    </section>
+                    <section data-transition="none">
+                    Architecture: Aarch64
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+  let x = ap.arg::&lti32&gt(); // x == 10
+  let y = ap.arg::&ltf64&gt(); // <--
+</code></pre></font>
+
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+    gr_top
+    |                   |                                       |
+    |----|----|----|----|----|----|----|----|----|----|----|----|
+    |                   |                                       |
+     0x0a 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x80
+                        ^
+                        |
+                     location
+    vr_top
+    |                                                           |
+    |----|----|----|----|----|----|----|----|----|----|----|----|
+    |                                                           |
+                              OOB
+    ^
+    |
+    location
+</code></pre></font>
+                    </section>
+                    <section data-transition="none">
+                    Architecture: Aarch64
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+  let x = ap.arg::&lti32&gt(); // x == 10
+  let y = ap.arg::&ltf64&gt(); // OOB
+</code></pre></font>
+
+<font size='7'><pre><code class="hljs" data-trim contenteditable>
+    gr_top
+    |                   |                                       |
+    |----|----|----|----|----|----|----|----|----|----|----|----|
+    |                   |                                       |
+     0x0a 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x80
+                        ^
+                        |
+                     location
+    vr_top
+    |                                                           |
+    |----|----|----|----|----|----|----|----|----|----|----|----|
+    |                                                           |
+                              OOB
+                                            ^
+                                            |
+                                         location
+</code></pre></font>
+                    </section>
+                </section>
+
+                <section style="text-align: left;">
+                    <h3>Acknowledgements</h3>
+                    <p>
+                    	<small>
+                            <span>
+                                <ul>
+                                    <li>
+                                        <a href="https://github.com/eddyb">@eddyb</a>
+                                    </li>
+                                    <li>
+                                        <a href="https://github.com/joshtriplett">@joshtriplett</a>
+                                    </li>
+                                    <li>
+                                        <a href="https://github.com/rkruppe">@rkruppe</a>
+                                    </li>
+                                </ul>
+                            </span>
+                        </small>
+                    </p>
+                    <p>
+                        <small>
+                            And everyone else that helped me with
+                            <a href="https://github.com/rust-lang/rust/pull/49878">rust-lang/rust#49878</a>
+                        </small>
+                    </p>
+                </section>
+
+                <section style="text-align: left;">
+                    <font size="6em">
+                        <h1>THE END</h1>
+                    </font>
+                </section>
+            </div>
+        </div>
+
+        <script src="reveal.js/lib/js/head.min.js"></script>
+        <script src="reveal.js/js/reveal.js"></script>
+
+        <script>
+
+            // More info https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+                // More info https://github.com/hakimel/reveal.js#dependencies
+                dependencies: [
+                    { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true },
+                    { src: 'reveal.js/plugin/notes/notes.js', async: true }
+                ]
+            });
+
+        </script>
+
+    </body>
+</html>
