@@ -4,9 +4,9 @@
     <head>
         <meta charset="utf-8">
 
-        <title>va_list's in Rust</title>
+        <title>Using C's va_list in Rust</title>
 
-        <meta name="description" content="A short talk about sylkie">
+        <meta name="description" content="Using C's va_list in Rust (and why you never should)">
         <meta name="author" content="Dan Robertson">
 
         <meta name="apple-mobile-web-app-capable" content="yes">
@@ -50,12 +50,11 @@
             <div class="slides">
                 <section>
                     <font size="6em">
-                        <span><h1><code>va_list</code></h1><h3>in</h3><h2>Rust</h2></span>
+                        <h1>Using C's <code>va_list</code> in Rust</h1>
                     </font>
                     <p>
-                        Using C's <code>va_list</code> in Rust
                         <br>
-                        <small>(and why you never should)</small>
+                        (and why you never should)
                     </p>
                     <p>
                         <small><a href="https://beta.rust-lang.org/">rust</a> / <a href="https://github.com/rust-lang/rust">GitHub</a></small>
@@ -79,14 +78,20 @@
 
                 <section>
                     <section>
-                        Type used as a parameter to retrieve a variable arguments
-                        passed to a function.
+                        <p>
+                            Type used as a parameter to retrieve a variable arguments
+                            passed to a function.
+                        </p>
+                        <br>
+                        <p>
+                            <small>Defined in section 7.16 of the C Standard.</small>
+                        </p>
                     </section>
                     <section>
                         <h3>The API</h3>
                         <ul>
                             <li>
-                                Declaired in the <code>stdarg.h</code> header.
+                                Declared in the <code>stdarg.h</code> header.
                             </li>
                             <li class="fragment">
                                 <code>va_start()</code> - Used to initialize the list
@@ -108,11 +113,11 @@
                 <section>
                     <h3>Example</h3>
                     <section>
-                        Define the function <code>add_n</code> that will ruturn the sum
+                        Define the function <code>add_n</code> that will return the sum
                         of up to <code>n</code> integers passed to the function.
                         <br>
 <pre><code class="hljs" data-trim contenteditable>
-    add_n(3, 10, 15, 17) == 42
+  add_n(3, 10, 15, 17) == 42
 </code></pre>
                     </section>
 
@@ -131,7 +136,7 @@ int add_n(int n, ...) {
   // Initialize the list and
   // call the "real" add_n
   va_start(ap, n);
-  ret = inner_add_n(n, ap);
+  ret = vadd_n(n, ap);
 
   // Cleanup and return
   va_end(ap);
@@ -143,7 +148,7 @@ int add_n(int n, ...) {
                                 C
 <font size='7'><pre><code class="hljs" data-trim contenteditable>
 // Worker function
-int inner_add_n(int n, va_list ap) {
+int vadd_n(int n, va_list ap) {
   int sum = 0;
   // Loop n times and add the given
   // argument of type int.
@@ -203,7 +208,7 @@ int add_n(int n, ...) {
   // Initialize the list and
   // call the "real" add_n
   va_start(ap, n);
-  ret = inner_add_n(n, ap);
+  ret = vadd_n(n, ap);
 
   // Cleanup and return
   va_end(ap);
@@ -217,7 +222,7 @@ int add_n(int n, ...) {
 use std::ffi::VaList;
 
 // Worker function
-pub unsafe extern "C" fn inner_add_n(
+pub unsafe extern "C" fn vadd_n(
   n: c_int,
   ap: VaList
 ) -&gt c_int {
@@ -241,24 +246,25 @@ pub unsafe extern "C" fn inner_add_n(
                     <h3>The Rust Implementation</h3>
 
                     <section>
-                        Heavily based on <a href="https://github.com/rust-lang/rfcs/blob/master/text/2137-variadic.md">RFC 2137</a>
+                        <a href="https://github.com/rust-lang/rfcs/blob/master/text/2137-variadic.md">RFC 2137</a>
                     </section>
 
                     <section>
 <font size='7'><pre><code class="hljs" data-trim contenteditable>
-/// The argument list of a C-compatible variadic function, corresponding to the
-/// underlying C `va_list`. Opaque.
+/// The argument list of a C-compatible variadic function,
+/// corresponding to the underlying C `va_list`. Opaque.
 pub struct VaList&lt'a&gt(/* fields omitted */)
 
 // Note: the lifetime on VaList is invariant
 impl<'a> VaList<'a> {
-    /// Extract the next argument from the argument list. T must have a type
-    /// usable in an FFI interface.
-    pub unsafe fn arg&ltT&gt(&mut self) -&gt T;
+  /// Extract the next argument from the argument list. T must
+  /// have a type usable in an FFI interface.
+  pub unsafe fn arg&ltT&gt(&mut self) -&gt T;
 
-    /// Copy the argument list. Destroys the copy after the closure returns.
-    pub unsafe fn copy&ltF, R&gt(&mut self, f: F) -&gt R
-       where F: for&lt'copy&gt FnOnce(VaList&lt'copy&gt) -&gt R;
+  /// Copy the argument list. Destroys the copy after the closure
+  /// returns.
+  pub unsafe fn copy&ltF, R&gt(&mut self, f: F) -&gt R
+    where F: for&lt'copy&gt FnOnce(VaList&lt'copy&gt) -&gt R;
 }
 </code></pre></font>
                     </section>
@@ -303,7 +309,12 @@ impl<'a> VaList<'a> {
 </code></pre>
 
                                 <small>
-                                    Result: Compiler Error
+                                    <p>
+                                        Result: Compiler Error
+                                    </p>
+                                    <p class="fragment">
+                                        <a href="https://github.com/rust-lang/rust/blob/master/src/libcore/ffi.rs#L128-L162">The VaArgSafe Sealed Trait</a>
+                                    </p>
                                 </small>
                             </div>
                         </div>
@@ -318,10 +329,10 @@ impl<'a> VaList<'a> {
                             <div class="col">
 <font size='7'><pre><code class="hljs" data-trim contenteditable>
 unsafe fn bad_idea(
-    fixed: u32,
-    mut ap: ...
+  fixed: u32,
+  mut ap: ...
 ) -&gt VaList {
-    ap
+  ap
 }
 </code></pre></font>
                                 <small>
@@ -332,11 +343,11 @@ unsafe fn bad_idea(
                             <div class="col fragment">
 <font size='7'><pre><code class="hljs" data-trim contenteditable>
 unsafe fn bad_idea(
-    mut ap: VaList
+  mut ap: VaList
 ) {
-    let new_copy = ap.copy(|mut ap| {
-        ap
-    });
+  let new_copy = ap.copy(|mut ap| {
+    ap
+  });
 }
 </code></pre></font>
                                 <small>
@@ -358,10 +369,10 @@ use core::ffi::VaList;
 
 #[no_mangle]
 pub unsafe extern "C" fn func(fixed: u32, mut ap: ...) {
-    let x: u8 = args.arg();
-    let y: u16 = args.arg();
-    let z: u32 = args.arg();
-    println!("{} {} {} {}", fixed, x, y, z);
+  let x: u8 = args.arg();
+  let y: u16 = args.arg();
+  let z: u32 = args.arg();
+  println!("{} {} {} {}", fixed, x, y, z);
 }
 </code></pre></font>
 

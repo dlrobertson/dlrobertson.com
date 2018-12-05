@@ -122,7 +122,7 @@ int add_n(int argc, ...) {
 }
 ```
 
-And now we should still be able to use `add_n()`/`vadd_n()` in our C programs!
+Huzzah!
 
 [RFC 2137]: https://github.com/rust-lang/rfcs/pull/2137
 [rust]: https://rust-lang.org
