@@ -5,6 +5,7 @@ title:    VaLists in Rust - pt. 1
 date:     2018-11-13
 summary:  Using the strange and terrifying va_list in Rust
 keywords: va_list, varargs, c, rust
+image:    dot-dot-dot.png
 ---
 
 ## Overview

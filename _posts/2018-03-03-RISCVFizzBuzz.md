@@ -5,6 +5,7 @@ title:    FizzBuzz Written in RISC-V Assembly
 date:     2018-03-03
 summary:  A simple super hacky implementation of FizzBuzz in RISC-V Assembly
 keywords: fizzbuzz, risc-v, assembly, code, programming
+image:    risc-v.png
 ---
 
 I could not find an implementation of [FizzBuzz] written in [RISC-V] Assembly, so

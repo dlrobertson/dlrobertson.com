@@ -5,6 +5,7 @@ title:    Copy Paste Code Strikes Again
 date:     2018-03-01
 summary:  Some recent experiences I've had with copy-paste code
 keywords: bugs, code, programming, copy-paste, null dereference, segfault
+image:    bug-feature.jpg
 ---
 
 A few days ago I was messing around with `smbclient` and I hit a null-deref

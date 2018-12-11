@@ -5,6 +5,7 @@ title:    Easter Egg
 date:     2018-06-06
 summary:  Random easter egg I found while frolicking on the web.
 keywords: easter egg, unicorn, http, time.com
+image:    time-unicorn.png
 ---
 
 Someone super cool must work at [time.com]. Nerds are awesome!
