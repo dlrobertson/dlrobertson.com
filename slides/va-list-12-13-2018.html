@@ -41,6 +41,12 @@
 .col {
     flex: 1;
 }
+code.code-block {
+    font-size: 0.8em;
+}
+code.mem-layout {
+    font-size: 0.7em;
+}
         </style>
 
     </head>
@@ -73,7 +79,7 @@
                 </section>
 
                 <section>
-                    <h2><code>va_list</code> basics</h3>
+                    <h2><code>va_list</code> in C</h3>
                 </section>
 
                 <section>
@@ -83,16 +89,17 @@
                             passed to a function.
                         </p>
                         <br>
-                        <p>
-                            <small>Defined in section 7.16 of the C Standard.</small>
+                        <p class="fragment">
+                            Defined in section 7.16 of the <a href="http://www.open-std.org/jtc1/sc22/wg14/www/abq/c17_updated_proposed_fdis.pdf">C Standard</a>.
+                        </p>
+                        <br>
+                        <p class="fragment">
+                            Available in <code>&ltstdarg.h&gt</code>.
                         </p>
                     </section>
                     <section>
                         <h3>The API</h3>
                         <ul>
-                            <li>
-                                Declared in the <code>stdarg.h</code> header.
-                            </li>
                             <li class="fragment">
                                 <code>va_start()</code> - Used to initialize the list
                             </li>
@@ -116,7 +123,7 @@
                         Define the function <code>add_n</code> that will return the sum
                         of up to <code>n</code> integers passed to the function.
                         <br>
-<pre><code class="hljs" data-trim contenteditable>
+<pre><code class="hljs code-block" data-trim contenteditable>
   add_n(3, 10, 15, 17) == 42
 </code></pre>
                     </section>
@@ -125,11 +132,10 @@
                         <div class="split-container">
                             <div class="col">
                                 C
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
+<pre><code class="hljs code-block" data-trim contenteditable>
 #include &ltstdarg.h&gt
 int add_n(int n, ...) {
-  // uninitialized va_list and
-  // other variables to be used.
+  // Declare local variables
   va_list ap;
   int ret = 0;
 
@@ -142,11 +148,11 @@ int add_n(int n, ...) {
   va_end(ap);
   return ret;
 }
-</code></pre></font>
+</code></pre>
                             </div>
                             <div class="col fragment">
                                 C
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
+<pre><code class="hljs code-block" data-trim contenteditable>
 // Worker function
 int vadd_n(int n, va_list ap) {
   int sum = 0;
@@ -157,7 +163,7 @@ int vadd_n(int n, va_list ap) {
   }
   return sum;
 }
-</code></pre></font>
+</code></pre>
                             </div>
                         </div>
                     </section>
@@ -169,12 +175,20 @@ int vadd_n(int n, va_list ap) {
 
                 <section>
                     <h3>Why?</h3>
-                    <small>
-                        <blockquote cite="https://github.com/rust-lang/rfcs/blob/master/text/2137-variadic.md">
-                            Rust can currently call any possible C interface, and export almost any interface for C to call.
-                            Variadic functions represent one of the last remaining gaps in the latter.
-                        </blockquote>
-                    </small>
+                    <section>
+                        <small> <blockquote cite="https://github.com/rust-lang/rfcs/blob/master/text/2137-variadic.md">
+                            Rust can currently call any possible C interface, <span class="fragment">and export
+                            <b>almost</b> any interface for C to call.</span><span class="fragment"> Variadic
+                            functions represent one of the last remaining gaps in the latter.</span>
+                        </blockquote></small>
+                    </section>
+                    <section>
+                        <ul>
+                            <li><code>fcntl()</code></li>
+                            <li><code>printf()</code></li>
+                            <li><code>exec()</code></li>
+                            <li>...</li>
+                    </section>
                 </section>
 
                 <section>
@@ -191,58 +205,6 @@ int vadd_n(int n, va_list ap) {
                 </section>
 
                 <section>
-                    <h3>Writing <code>add_n()</code> in Rust</h3>
-
-                    <section>
-                        <div class="split-container">
-                            <div class="col">
-                                C
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
-#include &ltstdarg.h&gt
-int add_n(int n, ...) {
-  // uninitialized va_list and
-  // other variables to be used.
-  va_list ap;
-  int ret = 0;
-
-  // Initialize the list and
-  // call the "real" add_n
-  va_start(ap, n);
-  ret = vadd_n(n, ap);
-
-  // Cleanup and return
-  va_end(ap);
-  return ret;
-}
-</code></pre></font>
-                            </div>
-                            <div class="col fragment">
-                                Rust
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
-use std::ffi::VaList;
-
-// Worker function
-pub unsafe extern "C" fn vadd_n(
-  n: c_int,
-  ap: VaList
-) -&gt c_int {
-  let mut sum = 0;
-  for i in 0..n {
-    sum += ap.arg::&ltc_int&gt()
-  }
-  sum
-}
-</code></pre></font>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section>
-                        <img src="images/kip-yes.gif" style="border:none"/>
-                    </section>
-                </section>
-
-                <section>
                     <h3>The Rust Implementation</h3>
 
                     <section>
@@ -250,7 +212,7 @@ pub unsafe extern "C" fn vadd_n(
                     </section>
 
                     <section>
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
+<pre><code class="hljs code-block" data-trim contenteditable>
 /// The argument list of a C-compatible variadic function,
 /// corresponding to the underlying C `va_list`. Opaque.
 pub struct VaList&lt'a&gt(/* fields omitted */)
@@ -266,9 +228,62 @@ impl<'a> VaList<'a> {
   pub unsafe fn copy&ltF, R&gt(&mut self, f: F) -&gt R
     where F: for&lt'copy&gt FnOnce(VaList&lt'copy&gt) -&gt R;
 }
-</code></pre></font>
+</code></pre>
                     </section>
 
+                </section>
+
+                <section>
+                    <h3>Writing <code>vadd_n()</code> in Rust</h3>
+
+                    <section>
+                        <div class="split-container">
+                            <div class="col">
+                                C
+<pre><code class="hljs code-block" data-trim contenteditable>
+#include &ltstdarg.h&gt
+int add_n(int n, ...) {
+  // Declare local variables
+  va_list ap;
+  int ret = 0;
+
+  // Initialize the list and
+  // call the "real" add_n
+  va_start(ap, n);
+  ret = vadd_n(n, ap);
+
+  // Cleanup and return
+  va_end(ap);
+  return ret;
+}
+</code></pre>
+                            </div>
+                            <div class="col fragment">
+                                Rust
+<pre><code class="hljs code-block" data-trim contenteditable>
+#![feature(c_variadic)]
+use std::ffi::VaList;
+
+// Worker function
+#[no_mangle]
+pub unsafe extern "C" fn vadd_n(
+  n: c_int,
+  ap: VaList
+) -&gt c_int {
+  let mut sum = 0;
+  for i in 0..n {
+    sum += ap.arg::&ltc_int&gt()
+  }
+  sum
+}
+</code></pre>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <img src="images/kip-yes.gif" style="border:none"/>
+                    </section>
                 </section>
 
                 <section>
@@ -286,7 +301,7 @@ impl<'a> VaList<'a> {
                         <div class="split-container">
                             <div class="col fragment">
                                 C
-<pre><code class="hljs" data-trim contenteditable>
+<pre><code class="hljs code-block" data-trim contenteditable>
   va_arg(ap, float);
 </code></pre>
 
@@ -304,7 +319,7 @@ impl<'a> VaList<'a> {
 
                             <div class="col fragment">
                                 Rust
-<pre><code class="hljs" data-trim contenteditable>
+<pre><code class="hljs code-block" data-trim contenteditable>
   ap.arg::&ltf32&gt();
 </code></pre>
 
@@ -321,48 +336,11 @@ impl<'a> VaList<'a> {
                     </section>
 
                     <section>
-                        <code>VaList</code> should not be able to escape the
-                        function.
-
-                        <p>
-                        <div class="split-container">
-                            <div class="col">
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
-unsafe fn bad_idea(
-  fixed: u32,
-  mut ap: ...
-) -&gt VaList {
-  ap
-}
-</code></pre></font>
-                                <small>
-                                    Result: Compiler Error
-                                </small>
-                            </div>
-
-                            <div class="col fragment">
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
-unsafe fn bad_idea(
-  mut ap: VaList
-) {
-  let new_copy = ap.copy(|mut ap| {
-    ap
-  });
-}
-</code></pre></font>
-                                <small>
-                                    Result: Compiler Error
-                                </small>
-                            </div>
-                        </div>
-                        </p>
-                    </section>
-
-                    <section>
                         <small>
                             <i>Note: Not yet implemented.</i>
                         </small>
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
+                        <span class="fragment">
+<pre><code class="hljs code-block" data-trim contenteditable>
 #![no_std]
 #![feature(c_variadic)]
 use core::ffi::VaList;
@@ -374,11 +352,50 @@ pub unsafe extern "C" fn func(fixed: u32, mut ap: ...) {
   let z: u32 = args.arg();
   println!("{} {} {} {}", fixed, x, y, z);
 }
-</code></pre></font>
+</code></pre>
+
+                            <p>
+                                <code>va_start()</code> and <code>va_end()</code> injected
+                                automagically by compiler.
+                            </p>
+                        </span>
+                    </section>
+
+                    <section>
+                        <code>VaList</code> should not be able to escape the
+                        function.
 
                         <p>
-                            <code>va_start()</code> and <code>va_end()</code> injected
-                            automagically by compiler.
+                        <div class="split-container">
+                            <div class="col">
+<pre><code class="hljs code-block" data-trim contenteditable>
+unsafe fn bad_idea(
+  fixed: u32,
+  mut ap: ...
+) -&gt VaList {
+  ap
+}
+</code></pre>
+                                <small>
+                                    Result: Compiler Error
+                                </small>
+                            </div>
+
+                            <div class="col fragment">
+<pre><code class="hljs code-block" data-trim contenteditable>
+unsafe fn bad_idea(
+  mut ap: VaList
+) {
+  let new_copy = ap.copy(|mut ap| {
+    ap
+  });
+}
+</code></pre>
+                                <small>
+                                    Result: Compiler Error
+                                </small>
+                            </div>
+                        </div>
                         </p>
                     </section>
                 </section>
@@ -404,11 +421,11 @@ pub unsafe extern "C" fn func(fixed: u32, mut ap: ...) {
                             </li>
                             <br>
                             <li>
-                                Aarch64
+                                Aarch64 ABI
                             </li>
                             <br>
                             <li>
-                                PowerPC
+                                PowerPC ABI
                             </li>
                         </ul>
                     </section>
@@ -418,9 +435,11 @@ pub unsafe extern "C" fn func(fixed: u32, mut ap: ...) {
                             <div class="col">
                                 <p>
                                     Enter Windows
+                                    <br>
+                                    <small>(and iOS)</small>
                                 </p>
                                 <p class="fragment fade-up">
-                                    Windows is <b>always</b> Character/Void Pointer
+                                    <b>always</b> Character/Void Pointer
                                  </p>
                             </div>
                             <div class="col">
@@ -434,33 +453,33 @@ pub unsafe extern "C" fn func(fixed: u32, mut ap: ...) {
                     <h3>A case-study</h3>
                     <section data-transition="none">
                         <p>
-                            <code>va_list ap</code> contains 10, (1LL &lt&lt 63)
+                            <code>va_list ap</code> contains 10, (1ULL &lt&lt 63)
                         </p>
                         <p>
                             <h4>Memory Layout</h4>
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
+<pre><code class="hljs mem-layout" data-trim contenteditable>
      First Arg           Second Arg
-     type: int           type: long long
+     type: int           type: unsigned long long
      value: 10           value: 0x8000000000000000 (1 &lt&lt 63)
      0xXXXXXXXXXX00      0xXXXXXXXXXX04
     |                   |                                       |
     |----|----|----|----|----|----|----|----|----|----|----|----|
     |                   |                                       |
      0x0a 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x80
-</code></pre></font>
+</code></pre>
                         </p>
                     </section>
 
                     <section data-transition="none">
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
-  let x = ap.arg::&lti32&gt(); // <--
-  let y = ap.arg::&lti64&gt();
+<pre><code class="hljs code-block" data-trim contenteditable>
+  let x = ap.arg::&lti32&gt(); // &lt--
+  let y = ap.arg::&ltu64&gt();
   let bad = ap.arg::&lti32&gt();
-</code></pre></font>
+</code></pre>
 
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
+<pre><code class="hljs mem-layout" data-trim contenteditable>
      First Arg           Second Arg
-     type: int           type: long long
+     type: int           type: unsigned long long
      value: 10           value: 0x8000000000000000 (1 &lt&lt 63)
      0xXXXXXXXXXX00      0xXXXXXXXXXX04
     |                   |                                       |
@@ -470,19 +489,19 @@ pub unsafe extern "C" fn func(fixed: u32, mut ap: ...) {
     ^
     |
     location
-</code></pre></font>
+</code></pre>
                     </section>
 
                     <section data-transition="none">
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
+<pre><code class="hljs code-block" data-trim contenteditable>
   let x = ap.arg::&lti32&gt(); // x == 10
-  let y = ap.arg::&lti64&gt(); // <--
+  let y = ap.arg::&ltu64&gt(); // &lt--
   let bad = ap.arg::&lti32&gt();
-</code></pre></font>
+</code></pre>
 
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
+<pre><code class="hljs mem-layout" data-trim contenteditable>
      First Arg           Second Arg
-     type: int           type: long long
+     type: int           type: unsigned long long
      value: 10           value: 0x8000000000000000 (1 &lt&lt 63)
      0xXXXXXXXXXX00      0xXXXXXXXXXX04
     |                   |                                       |
@@ -492,19 +511,19 @@ pub unsafe extern "C" fn func(fixed: u32, mut ap: ...) {
                         ^
                         |
                      location
-</code></pre></font>
+</code></pre>
                     </section>
 
                     <section data-transition="none">
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
+<pre><code class="hljs code-block" data-trim contenteditable>
   let x = ap.arg::&lti32&gt(); // x == 10
-  let y = ap.arg::&lti64&gt(); // y == 0x8000000000000000
-  let bad = ap.arg::&lti32&gt(); // <--
-</code></pre></font>
+  let y = ap.arg::&ltu64&gt(); // y == 0x8000000000000000
+  let bad = ap.arg::&lti32&gt(); // &lt--
+</code></pre>
 
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
+<pre><code class="hljs mem-layout" data-trim contenteditable>
      First Arg           Second Arg
-     type: int           type: long long
+     type: int           type: unsigned long long
      value: 10           value: 0x8000000000000000 (1 &lt&lt 63)
      0xXXXXXXXXXX00      0xXXXXXXXXXX04
     |                   |                                       |
@@ -514,19 +533,19 @@ pub unsafe extern "C" fn func(fixed: u32, mut ap: ...) {
                                                                 ^
                                                                 |
                                                              location
-</code></pre></font>
+</code></pre>
                     </section>
 
                     <section data-transition="none">
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
+<pre><code class="hljs code-block" data-trim contenteditable>
   let x = ap.arg::&lti32&gt(); // x == 10
-  let y = ap.arg::&lti64&gt(); // y == 0x8000000000000000
-  let bad = ap.arg::&lti32&gt(); // <-- OOB
-</code></pre></font>
+  let y = ap.arg::&ltu64&gt(); // y == 0x8000000000000000
+  let bad = ap.arg::&lti32&gt(); // OOB
+</code></pre>
 
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
+<pre><code class="hljs mem-layout" data-trim contenteditable>
      First Arg           Second Arg
-     type: int           type: long long
+     type: int           type: unsigned long long
      value: 10           value: 0x8000000000000000 (1 &lt&lt 63)
      0xXXXXXXXXXX00      0xXXXXXXXXXX04                          0xXXXXXXXXXX0c
     |                   |                                       |                   |
@@ -544,12 +563,12 @@ pub unsafe extern "C" fn func(fixed: u32, mut ap: ...) {
                     <h4>Mixing Types</h4>
                     <section data-transition="none">
                     Architecture: i686
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
+<pre><code class="hljs code-block" data-trim contenteditable>
   let x = ap.arg::&lti32&gt(); // x == 10
-  let y = ap.arg::&ltf64&gt(); // <--
-</code></pre></font>
+  let y = ap.arg::&ltf64&gt(); // &lt--
+</code></pre>
 
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
+<pre><code class="hljs mem-layout" data-trim contenteditable>
     |                   |                                       |
     |----|----|----|----|----|----|----|----|----|----|----|----|
     |                   |                                       |
@@ -557,16 +576,16 @@ pub unsafe extern "C" fn func(fixed: u32, mut ap: ...) {
                         ^
                         |
                      location
-</code></pre></font>
+</code></pre>
                     </section>
                     <section data-transition="none">
                     Architecture: i686
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
+<pre><code class="hljs code-block" data-trim contenteditable>
   let x = ap.arg::&lti32&gt(); // x == 10
   let y = ap.arg::&ltf64&gt(); // y == -0.00
-</code></pre></font>
+</code></pre>
 
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
+<pre><code class="hljs mem-layout" data-trim contenteditable>
     |                   |                                       |
     |----|----|----|----|----|----|----|----|----|----|----|----|
     |                   |                                       |
@@ -574,60 +593,72 @@ pub unsafe extern "C" fn func(fixed: u32, mut ap: ...) {
                                                                 ^
                                                                 |
                                                              location
-</code></pre></font>
+</code></pre>
                     </section>
                     <section data-transition="none">
                     Architecture: Aarch64
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
-  let x = ap.arg::&lti32&gt(); // x == 10
-  let y = ap.arg::&ltf64&gt(); // <--
-</code></pre></font>
-
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
-    gr_top
-    |                   |                                       |
-    |----|----|----|----|----|----|----|----|----|----|----|----|
-    |                   |                                       |
-     0x0a 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x80
-                        ^
-                        |
-                     location
-    vr_top
-    |                                                           |
-    |----|----|----|----|----|----|----|----|----|----|----|----|
-    |                                                           |
-                              OOB
-    ^
-    |
-    location
-</code></pre></font>
-                    </section>
-                    <section data-transition="none">
-                    Architecture: Aarch64
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
+<pre><code class="hljs code-block" data-trim contenteditable>
   let x = ap.arg::&lti32&gt(); // x == 10
   let y = ap.arg::&ltf64&gt(); // OOB
-</code></pre></font>
+</code></pre>
 
-<font size='7'><pre><code class="hljs" data-trim contenteditable>
-    gr_top
-    |                   |                                       |
-    |----|----|----|----|----|----|----|----|----|----|----|----|
-    |                   |                                       |
-     0x0a 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x80
-                        ^
-                        |
-                     location
-    vr_top
-    |                                                           |
-    |----|----|----|----|----|----|----|----|----|----|----|----|
-    |                                                           |
-                              OOB
-                                            ^
-                                            |
-                                         location
-</code></pre></font>
+<pre><code class="hljs mem-layout" data-trim contenteditable>
+gr_top |                   |                                       |
+       |----|----|----|----|----|----|----|----|----|----|----|----|
+       |                   |                                       |
+        0x0a 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x80
+                           ^
+                           |
+                        location
+vr_top |                                                           |
+       |----|----|----|----|----|----|----|----|----|----|----|----|
+       |                         OOB                               |
+       ^
+       |
+    location
+</code></pre>
                     </section>
+                    <section data-transition="none">
+                    Architecture: Aarch64
+<pre><code class="hljs code-block" data-trim contenteditable>
+  let x = ap.arg::&lti32&gt(); // x == 10
+  let y = ap.arg::&ltf64&gt(); // OOB
+</code></pre>
+
+<pre><code class="hljs mem-layout" data-trim contenteditable>
+gr_top |                   |                                       |
+       |----|----|----|----|----|----|----|----|----|----|----|----|
+       |                   |                                       |
+        0x0a 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x80
+                           ^
+                           |
+                        location
+vr_top |                                                           |
+       |----|----|----|----|----|----|----|----|----|----|----|----|
+       |                         OOB                               |
+                                               ^
+                                               |
+                                            location
+</code></pre>
+                    </section>
+                </section>
+
+                <section>
+                    <p>
+                        <img src="images/xkcd-371.png"/>
+                    </p>
+                    <br>
+                    <section>
+                    <p>
+                        Never use <code>VaList</code> unless you have to.
+                    </p>
+                    </section>
+                    <section>
+                    <p>
+                        If you must, be very very careful.
+                    </p>
+                    </section>
+                    <br>
                 </section>
 
                 <section style="text-align: left;">
