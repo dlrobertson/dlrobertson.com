@@ -84,6 +84,7 @@ code.mem-layout {
 
                 <section>
                     <section>
+                        <h3>Background</h3>
                         <p>
                             Type used as a parameter to retrieve a variable arguments
                             passed to a function.
@@ -119,20 +120,75 @@ code.mem-layout {
 
                 <section>
                     <h3>Example</h3>
-                    <section>
-                        Define the function <code>add_n</code> that will return the sum
-                        of up to <code>n</code> integers passed to the function.
-                        <br>
-<pre><code class="hljs code-block" data-trim contenteditable>
+                    Define the function <code>add_n</code> that will return the sum
+                    of up to <code>n</code> integers passed to the function.
+                    <br>
+<pre><code class="c code-block" data-trim contenteditable>
   add_n(3, 10, 15, 17) == 42
 </code></pre>
-                    </section>
+                </section>
 
-                    <section>
-                        <div class="split-container">
-                            <div class="col">
-                                C
-<pre><code class="hljs code-block" data-trim contenteditable>
+                <section>
+                    <h3><code>add_n</code></h3>
+                    <section data-transition="none">
+<pre><code class="c code-block" data-trim contenteditable>
+#include &ltstdarg.h&gt
+int add_n(int n, ...) {
+
+
+
+
+
+
+
+
+
+
+
+
+}
+</code></pre>
+                    </section>
+                    <section data-transition="none">
+<pre><code class="c code-block" data-trim contenteditable>
+#include &ltstdarg.h&gt
+int add_n(int n, ...) {
+  // Declare local variables
+  va_list ap;
+  int ret = 0;
+
+
+
+
+
+
+
+
+
+}
+</code></pre>
+                    </section>
+                    <section data-transition="none">
+<pre><code class="c code-block" data-trim contenteditable>
+#include &ltstdarg.h&gt
+int add_n(int n, ...) {
+  // Declare local variables
+  va_list ap;
+  int ret = 0;
+
+  // Initialize the list and
+  // call the "real" add_n
+  va_start(ap, n);
+  ret = vadd_n(n, ap);
+
+
+
+
+}
+</code></pre>
+                    </section>
+                    <section data-transition="none">
+<pre><code class="c code-block" data-trim contenteditable>
 #include &ltstdarg.h&gt
 int add_n(int n, ...) {
   // Declare local variables
@@ -149,10 +205,41 @@ int add_n(int n, ...) {
   return ret;
 }
 </code></pre>
-                            </div>
-                            <div class="col fragment">
-                                C
-<pre><code class="hljs code-block" data-trim contenteditable>
+                    </section>
+                </section>
+
+                <section>
+                    <h3><code>vadd_n</code></h3>
+                    <section data-transition="none">
+<pre><code class="c code-block" data-trim contenteditable>
+// Worker function
+int vadd_n(int n, va_list ap) {
+  int sum = 0;
+
+
+
+
+
+
+}
+</code></pre>
+                    </section>
+                    <section data-transition="none">
+<pre><code class="c code-block" data-trim contenteditable>
+// Worker function
+int vadd_n(int n, va_list ap) {
+  int sum = 0;
+  // Loop n times and add the given
+  // argument of type int.
+  for (i = 0; i &lt n; ++i) {
+
+  }
+  return sum;
+}
+</code></pre>
+                    </section>
+                    <section data-transition="none">
+<pre><code class="c code-block" data-trim contenteditable>
 // Worker function
 int vadd_n(int n, va_list ap) {
   int sum = 0;
@@ -164,8 +251,6 @@ int vadd_n(int n, va_list ap) {
   return sum;
 }
 </code></pre>
-                            </div>
-                        </div>
                     </section>
                 </section>
 
@@ -212,7 +297,7 @@ int vadd_n(int n, va_list ap) {
                     </section>
 
                     <section>
-<pre><code class="hljs code-block" data-trim contenteditable>
+<pre><code class="rust code-block" data-trim contenteditable>
 /// The argument list of a C-compatible variadic function,
 /// corresponding to the underlying C `va_list`. Opaque.
 pub struct VaList&lt'a&gt(/* fields omitted */)
@@ -234,33 +319,65 @@ impl<'a> VaList<'a> {
                 </section>
 
                 <section>
-                    <h3>Writing <code>vadd_n()</code> in Rust</h3>
+                    <h3><code>vadd_n</code> in Rust</h3>
+                    <section data-transition="none">
+<pre><code class="rust code-block" contenteditable>#![feature(c_variadic)]
+use std::ffi::VaList;
 
-                    <section>
-                        <div class="split-container">
-                            <div class="col">
-                                C
-<pre><code class="hljs code-block" data-trim contenteditable>
-#include &ltstdarg.h&gt
-int add_n(int n, ...) {
-  // Declare local variables
-  va_list ap;
-  int ret = 0;
 
-  // Initialize the list and
-  // call the "real" add_n
-  va_start(ap, n);
-  ret = vadd_n(n, ap);
 
-  // Cleanup and return
-  va_end(ap);
-  return ret;
+
+
+
+
+
+
+
+
+
+
+</code></pre>
+                    </section>
+                    <section data-transition="none">
+<pre><code class="rust code-block" data-trim contenteditable>
+#![feature(c_variadic)]
+use std::ffi::VaList;
+
+// Worker function
+#[no_mangle]
+pub unsafe extern "C" fn vadd_n(
+  n: c_int,
+  ap: VaList
+) -&gt c_int {
+
+
+
+
+
 }
 </code></pre>
-                            </div>
-                            <div class="col fragment">
-                                Rust
-<pre><code class="hljs code-block" data-trim contenteditable>
+                    </section>
+                    <section data-transition="none">
+<pre><code class="rust code-block" data-trim contenteditable>
+#![feature(c_variadic)]
+use std::ffi::VaList;
+
+// Worker function
+#[no_mangle]
+pub unsafe extern "C" fn vadd_n(
+  n: c_int,
+  ap: VaList
+) -&gt c_int {
+  let mut sum = 0;
+  for i in 0..n {
+
+  }
+  sum
+}
+</code></pre>
+                    </section>
+                    <section data-transition="none">
+<pre><code class="rust code-block" data-trim contenteditable>
 #![feature(c_variadic)]
 use std::ffi::VaList;
 
@@ -277,14 +394,12 @@ pub unsafe extern "C" fn vadd_n(
   sum
 }
 </code></pre>
-                            </div>
-                        </div>
                     </section>
-
                     <section>
                         <img src="images/kip-yes.gif" style="border:none"/>
                     </section>
                 </section>
+
 
                 <section>
                     <h4>Rust API considerations</h4>
@@ -301,7 +416,7 @@ pub unsafe extern "C" fn vadd_n(
                         <div class="split-container">
                             <div class="col fragment">
                                 C
-<pre><code class="hljs code-block" data-trim contenteditable>
+<pre><code class="c code-block" data-trim contenteditable>
   va_arg(ap, float);
 </code></pre>
 
@@ -319,7 +434,7 @@ pub unsafe extern "C" fn vadd_n(
 
                             <div class="col fragment">
                                 Rust
-<pre><code class="hljs code-block" data-trim contenteditable>
+<pre><code class="rust code-block" data-trim contenteditable>
   ap.arg::&ltf32&gt();
 </code></pre>
 
@@ -340,7 +455,7 @@ pub unsafe extern "C" fn vadd_n(
                             <i>Note: Not yet implemented.</i>
                         </small>
                         <span class="fragment">
-<pre><code class="hljs code-block" data-trim contenteditable>
+<pre><code class="rust code-block" data-trim contenteditable>
 #![no_std]
 #![feature(c_variadic)]
 use core::ffi::VaList;
@@ -368,7 +483,7 @@ pub unsafe extern "C" fn func(fixed: u32, mut ap: ...) {
                         <p>
                         <div class="split-container">
                             <div class="col">
-<pre><code class="hljs code-block" data-trim contenteditable>
+<pre><code class="rust code-block" data-trim contenteditable>
 unsafe fn bad_idea(
   fixed: u32,
   mut ap: ...
@@ -382,7 +497,7 @@ unsafe fn bad_idea(
                             </div>
 
                             <div class="col fragment">
-<pre><code class="hljs code-block" data-trim contenteditable>
+<pre><code class="rust code-block" data-trim contenteditable>
 unsafe fn bad_idea(
   mut ap: VaList
 ) {
@@ -471,7 +586,7 @@ unsafe fn bad_idea(
                     </section>
 
                     <section data-transition="none">
-<pre><code class="hljs code-block" data-trim contenteditable>
+<pre><code class="rust code-block" data-trim contenteditable>
   let x = ap.arg::&lti32&gt(); // &lt--
   let y = ap.arg::&ltu64&gt();
   let bad = ap.arg::&lti32&gt();
@@ -493,7 +608,7 @@ unsafe fn bad_idea(
                     </section>
 
                     <section data-transition="none">
-<pre><code class="hljs code-block" data-trim contenteditable>
+<pre><code class="rust code-block" data-trim contenteditable>
   let x = ap.arg::&lti32&gt(); // x == 10
   let y = ap.arg::&ltu64&gt(); // &lt--
   let bad = ap.arg::&lti32&gt();
@@ -515,7 +630,7 @@ unsafe fn bad_idea(
                     </section>
 
                     <section data-transition="none">
-<pre><code class="hljs code-block" data-trim contenteditable>
+<pre><code class="rust code-block" data-trim contenteditable>
   let x = ap.arg::&lti32&gt(); // x == 10
   let y = ap.arg::&ltu64&gt(); // y == 0x8000000000000000
   let bad = ap.arg::&lti32&gt(); // &lt--
@@ -537,7 +652,7 @@ unsafe fn bad_idea(
                     </section>
 
                     <section data-transition="none">
-<pre><code class="hljs code-block" data-trim contenteditable>
+<pre><code class="rust code-block" data-trim contenteditable>
   let x = ap.arg::&lti32&gt(); // x == 10
   let y = ap.arg::&ltu64&gt(); // y == 0x8000000000000000
   let bad = ap.arg::&lti32&gt(); // OOB
@@ -563,7 +678,7 @@ unsafe fn bad_idea(
                     <h4>Mixing Types</h4>
                     <section data-transition="none">
                     Architecture: i686
-<pre><code class="hljs code-block" data-trim contenteditable>
+<pre><code class="rust code-block" data-trim contenteditable>
   let x = ap.arg::&lti32&gt(); // x == 10
   let y = ap.arg::&ltf64&gt(); // &lt--
 </code></pre>
@@ -580,7 +695,7 @@ unsafe fn bad_idea(
                     </section>
                     <section data-transition="none">
                     Architecture: i686
-<pre><code class="hljs code-block" data-trim contenteditable>
+<pre><code class="rust code-block" data-trim contenteditable>
   let x = ap.arg::&lti32&gt(); // x == 10
   let y = ap.arg::&ltf64&gt(); // y == -0.00
 </code></pre>
@@ -597,7 +712,7 @@ unsafe fn bad_idea(
                     </section>
                     <section data-transition="none">
                     Architecture: Aarch64
-<pre><code class="hljs code-block" data-trim contenteditable>
+<pre><code class="rust code-block" data-trim contenteditable>
   let x = ap.arg::&lti32&gt(); // x == 10
   let y = ap.arg::&ltf64&gt(); // OOB
 </code></pre>
@@ -620,7 +735,7 @@ vr_top |                                                           |
                     </section>
                     <section data-transition="none">
                     Architecture: Aarch64
-<pre><code class="hljs code-block" data-trim contenteditable>
+<pre><code class="rust code-block" data-trim contenteditable>
   let x = ap.arg::&lti32&gt(); // x == 10
   let y = ap.arg::&ltf64&gt(); // OOB
 </code></pre>
@@ -648,17 +763,10 @@ vr_top |                                                           |
                         <img src="images/xkcd-371.png"/>
                     </p>
                     <br>
-                    <section>
                     <p>
-                        Never use <code>VaList</code> unless you have to.
+                        Be nice to your computer. Be careful with
+                        <code>va_list</code>'s
                     </p>
-                    </section>
-                    <section>
-                    <p>
-                        If you must, be very very careful.
-                    </p>
-                    </section>
-                    <br>
                 </section>
 
                 <section style="text-align: left;">
