@@ -714,7 +714,7 @@ unsafe fn bad_idea(
                     Architecture: Aarch64
 <pre><code class="rust code-block" data-trim contenteditable>
   let x = ap.arg::&lti32&gt(); // x == 10
-  let y = ap.arg::&ltf64&gt(); // OOB
+  let y = ap.arg::&ltf64&gt(); // &lt--
 </code></pre>
 
 <pre><code class="hljs mem-layout" data-trim contenteditable>
