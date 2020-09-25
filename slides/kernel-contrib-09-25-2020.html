@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>Contributing to the Linux Kernel</title>
+
+        <meta name="description" content="A short talk about contributing to the Linux Kernel">
+        <meta name="author" content="Dan Robertson">
+
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="reveal.js/css/reveal.css">
+        <link rel="stylesheet" href="reveal.js/css/theme/blood.css" id="theme">
+
+        <link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
+
+<style>
+@media print {
+    .slide-background {
+        background-color: #222 !important;
+        -webkit-print-color-adjust: exact;
+    }
+}
+</style>
+        <script>
+            var link = document.createElement( 'link' );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = window.location.search.match( /print-pdf/gi ) ? 'reveal.js/css/print/pdf.css' : 'reveal.js/css/print/paper.css';
+            document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+
+    </head>
+
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section>
+                    <font size="6em">
+                        <h1>Contributing to Linux</h1>
+                    </font>
+                    <p>
+                        Quick tips on how to get your first patch in the kernel.
+                    </p>
+                    <p>
+                        <small>Created by <a href="http://dlrobertson.com">Dan Robertson</a> / <a href="http://github.com/dlrobertson">GitHub</a></small>
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Disclaimer</h3>
+                    <p>
+                        I am <u>not</u> an expert
+                    </p>
+                    <p class="fragment">
+                        <img src="images/ireadthebook.png" height="50%" width="50%" style="border: none"/>
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Requirements</h3>
+                    <section>
+                        A email client that can send patches without an attachment
+                        <p class="fragment">
+                            There is a doc for that!
+                            </br>
+                            <a href="https://www.kernel.org/doc/html/v5.8/process/email-clients.html">
+                                Documentation/process/email-clients.html
+                            </a>
+                        </p>
+                    </section>
+
+                    <section>
+                        <img src="images/mutt-25.png" height="40%" width="40%" style="border: none"/>
+                    </section>
+
+                    <section>
+                        Get the code!
+                        <font size=6><pre><code data-trim data-noescape>
+git clone -b staging-testing git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
+                        </code></pre></font>
+                    </section>
+
+                    <section>
+                        <p style="color:red">
+                            Note:
+                        </p>
+                        <p class="fragment">
+                            Does <font style="color:red">not</font> require wizardry
+                            </br>
+                            <img src="images/gandalf.gif" height="40%" width="40%" style="border: none"/>
+                        </p>
+                    </section>
+                </section>
+
+                <section>
+                    <h3>Documentation</h3>
+                    <section>
+                        <font size=6><pre><code data-trim data-noescape>
+make htmldocs
+                        </code></pre></font>
+                    </section>
+
+                    <section>
+                        <img src="images/snl-fixed-it.gif" height="40%" width="40%" style="border: none"/>
+                    </section>
+
+                    <section>
+                        Use <code>script/kernel-doc</code>
+                    </section>
+
+                    <section style="text-align: left">
+                        <h3>Tips</h3>
+                        Good Reads
+                        <ul>
+                            <li class="fragment">
+                                <a href="https://www.kernel.org/doc/html/v5.8/doc-guide/contributing.html">
+                                    Documentation/doc-guide/contributing.rst
+                                </a>
+                            </li>
+                            <li class="fragment">
+                                <a href="https://www.kernel.org/doc/html/v5.8/doc-guide/kernel-doc.html">
+                                    Documentation/doc-guide/kernel-doc.rst
+                                </a>
+                            </li>
+                            <li class="fragment">
+                                <a href="https://www.kernel.org/doc/html/v5.8/doc-guide/sphinx.html">
+                                    Documentation/doc-guide/sphinx.rst
+                                </a>
+                            </li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Write or Update a Device Driver</h3>
+                    </section>
+
+                    <section>
+                        Pick a subsystem
+                    </section>
+
+                    <section>
+                        <h3>Industrial I/O (IIO)</h3>
+                        <small><blockquote cite="https://www.kernel.org/doc/html/v5.8/driver-api/iio/intro.html">
+The main purpose of the Industrial I/O subsystem (IIO) is to provide support for devices that in
+some sense perform either analog-to-digital conversion (ADC) or digital-to-analog conversion (DAC)
+or both. The aim is to fill the gap between the somewhat similar hwmon and input subsystems.
+                        </blockquote></small>
+                    </section>
+
+                    <section>
+                        <font size=6><pre><code data-trim data-noescape>
+/bin/zsh ➜ ls ./drivers/iio/imu/
+...
+adis16460.c  adis16480.c  adis.c         bmi160          fxos8700.h
+...
+                        </code></pre></font>
+                    </section>
+
+                    <section>
+                        <img height="60%" width="60%" src="images/mouser-bmi270.png"/>
+                    </section>
+
+                    <section>
+                        <font size=6><pre><code data-trim data-noescape>
+/bin/zsh ➜ ls ./drivers/iio/accel
+...
+adxl345_core.c  bma180.c       bmc150-accel-i2c.c      hid-sensor-accel-3d.c
+...
+                        </code></pre></font>
+                        <br>
+                        BMA180 seems old.
+                    </section>
+
+                    <section>
+                        <font size=6><pre><code data-trim data-noescape>
+static const struct of_device_id bma180_of_match[] = {
+        ...
+        {
+                .compatible = "bosch,bma180",
+                .data = (void *)BMA180
+        },
+        {
+                .compatible = "bosch,bma250",
+                .data = (void *)BMA250
+        },
+        {
+                .compatible = "bosch,bma254",
+                .data = (void *)BMA254
+        },
+        ...
+};
+MODULE_DEVICE_TABLE(of, bma180_of_match);
+                        </code></pre></font>
+                    </section>
+                </section>
+
+                <section>
+                    <h3>Upstream the Patch</h3>
+                    <section style="text-align: left;">
+                        Check Your Patch
+                        </br>
+                        <ul>
+                            <li class="fragment"><code>make htmldocs</code></li>
+                            <li class="fragment"><code>scripts/checkpatch.pl</code></li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <p><code><pre>
+git show --format=email HEAD | \
+    ./scripts/checkpatch.pl --strict --codespell
+                        </pre></code></p>
+                        <br/>
+                        <p class="fragment">
+                            <a href="https://github.com/vivien/vim-linux-coding-style">
+                                vim-linux-coding-style
+                            </a>
+                        </p>
+                    </section>
+
+                    <section>
+                        <p>
+                            Find the Maintainer
+                        </p>
+                        <p>
+                            <font size=6>
+                                <ul>
+                                    <li><code>./scripts/get_maintainer.pl /path/to/patch</code></li>
+                                    <li><code>./scripts/get_maintainer.pl /path/in/tree</code></li>
+                                </ul>
+                            </font>
+                        </p>
+                    </section>
+
+                    <section>
+                        Reply to reviews
+                        </br>
+                        <img src="images/lots-of-emails.gif" height="40%" width="40%" style="border:none"/>
+                    </section>
+
+                    <section>
+                        <font size=5><pre><code data-trim data-noescape>
+From ac4806f3cf81c3bd6ed85ea5b5d3ceacce34de4e Mon Sep 17 00:00:00 2001
+From: Dan Robertson &lt;daniel.robertson@windriver.com&gt;
+Date: Fri, 25 Sep 2020 10:38:54 -0400
+Subject: [PATCH] MAINTAINERS: enlist Dan for f2fs stuff
+
+Add me to the f2fs maintainers
+
+Signed-off-by: Dan Robertson &lt;daniel.robertson@windriver.com&gt;
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 924616dc19ff..4e12d6d8cd68 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6590,6 +6590,7 @@ F:        arch/arc/plat-eznps
+ F2FS FILE SYSTEM
+ M:     Jaegeuk Kim &lt;jaegeuk@kernel.org&gt;
+ M:     Chao Yu &lt;yuchao0@huawei.com&gt;
++M:     Dan Robertson &lt;dan.robertson@windriver.com&gt;
+ L:     linux-f2fs-devel@lists.sourceforge.net
+ S:     Maintained
+ W:     https://f2fs.wiki.kernel.org/
+                        </code></pre></font>
+                    </section>
+
+                    <section>
+                        <font size=5><pre><code data-trim data-noescape>
+On Fri, Sep 25, 2020 at 10:45:01AM -0400, Dan Robertson wrote:
+> From: Dan Robertson <daniel.robertson@windriver.com>
+>
+> Add me to the f2fs maintainers
+>
+> Signed-off-by: Dan Robertson <daniel.robertson@windriver.com>
+> ---
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 924616dc19ff..4e12d6d8cd68 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -6590,6 +6590,7 @@ F:        arch/arc/plat-eznps
+>  F2FS FILE SYSTEM
+>  M:     Jaegeuk Kim &lt;jaegeuk@kernel.org&gt;
+>  M:     Chao Yu &lt;yuchao0@huawei.com&gt;
+> +M:     Dan Robertson &lt;dan.robertson@windriver.com&gt;
+
+Why? He is bad at code.
+
+>  L:   linux-f2fs-devel@lists.sourceforge.net
+>  S:   Maintained
+>  W:   https://f2fs.wiki.kernel.org/
+                        </code></pre></font>
+                    </section>
+
+                    <section>
+                        <font size=5><pre><code data-trim data-noescape>
+On Fri, Sep 25, 2020 at 02:44:54PM +0000, Dan Robertson wrote:
+> On Fri, Sep 25, 2020 at 10:45:01AM -0400, Dan Robertson wrote:
+> From: Dan Robertson <daniel.robertson@windriver.com>
+> > From: Dan Robertson <daniel.robertson@windriver.com>
+> >
+> > Add me to the f2fs maintainers
+> >
+> > Signed-off-by: Dan Robertson <daniel.robertson@windriver.com>
+> > ---
+> >  MAINTAINERS | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 924616dc19ff..4e12d6d8cd68 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -6590,6 +6590,7 @@ F:        arch/arc/plat-eznps
+> >  F2FS FILE SYSTEM
+> >  M:     Jaegeuk Kim &lt;jaegeuk@kernel.org&gt;
+> >  M:     Chao Yu &lt;yuchao0@huawei.com&gt;
+> > +M:     Dan Robertson &lt;dan.robertson@windriver.com&gt;
+>
+> Why? He is bad at code.
+>
+
+No I'm not.
+
+> >  L: linux-f2fs-devel@lists.sourceforge.net
+> >  S: Maintained
+> >  W: https://f2fs.wiki.kernel.org/
+                        </code></pre></font>
+                    </section>
+                </section>
+
+                <section>
+                    <h2>Demo</h2>
+                </section>
+
+                <section style="text-align: left;">
+                    <font size="6em">
+                        <h1>THE END</h1>
+                    </font>
+                    <br>
+                    <small>
+                        <p>
+                            <a href="https://www.kernel.org/doc/html/v5.8/process/submitting-patches.html">
+                                Documentation/process/submitting-patches.rst
+                            </a>
+                        </p>
+                        <p>
+                            <a href="https://kernelnewbies.org/FirstKernelPatch">First Kernel Patch</a>
+                        </p>
+                        <p>
+                            <a href="http://www.catb.org/~esr/faqs/smart-questions.html">
+                                How to Ask Questions the Smart Way
+                            </a>
+                        </p>
+                        <p>
+                            A future brow bag on kernel debugging and fuzzing
+                        </p>
+                    </small>
+                </section>
+            </div>
+        </div>
+
+        <script src="reveal.js/lib/js/head.min.js"></script>
+        <script src="reveal.js/js/reveal.js"></script>
+
+        <script>
+
+            // More info https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+                // More info https://github.com/hakimel/reveal.js#dependencies
+                dependencies: [
+                    { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true },
+                    { src: 'reveal.js/plugin/notes/notes.js', async: true }
+                ]
+            });
+
+        </script>
+
+    </body>
+</html>
