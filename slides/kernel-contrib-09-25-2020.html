@@ -65,7 +65,7 @@
                 <section>
                     <h3>Requirements</h3>
                     <section>
-                        A email client that can send patches without an attachment
+                        An email client that can send patches without an attachment
                         <p class="fragment">
                             There is a doc for that!
                             </br>
@@ -96,6 +96,15 @@ git clone -b staging-testing git://git.kernel.org/pub/scm/linux/kernel/git/gregk
                             <img src="images/gandalf.gif" height="40%" width="40%" style="border: none"/>
                         </p>
                     </section>
+                </section>
+
+                <section>
+                    <h3>Finding Some Work</h3>
+                    <img class="fragment fade-in-then-semi-out" height="40%" width="40%" src="images/searching-for-issue.gif"/>
+                    <br>
+                    <p class="fragment">
+                        <img height="40%" width="40%" src="images/crowded-subway.gif"/>
+                    </p>
                 </section>
 
                 <section>
@@ -227,16 +236,27 @@ git show --format=email HEAD | \
                     </section>
 
                     <section>
+                        <br>
+                        <h4>Sending the Patch</h4>
                         <p>
-                            Find the Maintainer
+                            <code><pre class="fragment fade-in-then-semi-out" data-fragment-index="0">
+git format-patch -o /path/for/patches --cover-letter HEAD~
+                            </pre></code>
                         </p>
-                        <p>
+                        <p class="fragment fade-in-then-semi-out" style="text-align: left" data-fragment-index="1">
+                            Find the Maintainer
+                            <br>
                             <font size=6>
-                                <ul>
+                                <ul class="fragment fade-in-then-semi-out" style="text-align: left" data-fragment-index="1">
                                     <li><code>./scripts/get_maintainer.pl /path/to/patch</code></li>
                                     <li><code>./scripts/get_maintainer.pl /path/in/tree</code></li>
                                 </ul>
                             </font>
+                        </p>
+                        <p class="fragment fade-in-then-semi-out" data-fragment-index="2">
+                            <code><pre class="fragment fade-in-then-semi-out" data-fragment-index="2">
+git send-email /path/to/patches/*.patch
+                            </pre></code>
                         </p>
                     </section>
 
@@ -362,7 +382,7 @@ No I'm not.
                             </a>
                         </p>
                         <p>
-                            A future brow bag on kernel debugging and fuzzing
+                            A future brown bag
                         </p>
                     </small>
                 </section>
