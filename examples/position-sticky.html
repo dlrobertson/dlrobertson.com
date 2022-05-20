@@ -1,0 +1,48 @@
+<style>
+
+.container {
+  max-width: 600px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.header {
+  height:50px;
+  background:#aaa;
+  position:sticky;
+  top:0;
+  width: 100%
+}
+
+.footer {
+  height:50px;
+  background:#aaa;
+  position:sticky;
+  bottom:0;
+  width: 100%
+}
+
+.content {
+  min-height:3000px;
+}
+
+button:hover {
+  background-color: red;
+}
+
+</style>
+
+<script>
+  function myOnclick() {
+    alert("Hello, World!");
+  }
+</script>
+
+<div class="container">
+  <button onclick="myOnclick()" class="header">HEADER</button>
+  <div class="content"></div>
+  <button onclick="myOnclick()" class="footer">FOOTER</button>
+</div>
+
