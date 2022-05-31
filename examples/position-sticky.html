@@ -1,6 +1,6 @@
 <style>
 
-.container {
+.main-container {
   max-width: 600px;
   margin-top: 50px;
   margin-bottom: 50px;
@@ -8,30 +8,35 @@
   margin-right: auto;
 }
 
-.header {
+.main-header {
   height:50px;
   background:#aaa;
+}
+
+.main-footer {
+  height:50px;
+  background:#aaa;
+}
+
+.main-content {
+  min-height:5000px;
+}
+
+.main-header {
   position:sticky;
   top:0;
   width: 100%
 }
 
-.footer {
-  height:50px;
-  background:#aaa;
+.main-footer {
   position:sticky;
   bottom:0;
   width: 100%
 }
 
-.content {
-  min-height:3000px;
-}
-
 button:hover {
   background-color: red;
 }
-
 </style>
 
 <script>
@@ -39,10 +44,11 @@ button:hover {
     alert("Hello, World!");
   }
 </script>
+<meta name="viewport" content="width=device-width; initial-scale=1.0">
 
-<div class="container">
-  <button onclick="myOnclick()" class="header">HEADER</button>
-  <div class="content"></div>
-  <button onclick="myOnclick()" class="footer">FOOTER</button>
+<div class="main-container">
+  <button onclick="myOnclick()" class="main-header">HEADER</button>
+  <div class="main-content"></div>
+  <button onclick="myOnclick()" class="main-footer">FOOTER</button>
 </div>
 
