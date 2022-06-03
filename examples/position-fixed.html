@@ -1,0 +1,54 @@
+<style>
+
+.main-container {
+  max-width: 600px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.main-header {
+  height:50px;
+  background:#aaa;
+}
+
+.main-footer {
+  height:50px;
+  background:#aaa;
+}
+
+.main-content {
+  min-height:5000px;
+}
+
+.main-header {
+  position:fixed;
+  top:0;
+  width: 100%
+}
+
+.main-footer {
+  position:fixed;
+  bottom:0;
+  width: 100%
+}
+
+button:hover {
+  background-color: red;
+}
+</style>
+
+<script>
+  function myOnclick() {
+    alert("Hello, World!");
+  }
+</script>
+<meta name="viewport" content="width=device-width; initial-scale=1.0">
+
+<div class="main-container">
+  <button onclick="myOnclick()" class="main-header">HEADER</button>
+  <div class="main-content"></div>
+  <button onclick="myOnclick()" class="main-footer">FOOTER</button>
+</div>
+
