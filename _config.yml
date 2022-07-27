@@ -18,4 +18,4 @@ kramdown:
     # Use existing pygments syntax highlighting css
     css_class: 'highlight'
 
-exclude: ["slides/reveal.js/demo.html", "slides/reveal.js/index.html"]
+exclude: ["vendor", "slides/reveal.js/demo.html", "slides/reveal.js/index.html"]
