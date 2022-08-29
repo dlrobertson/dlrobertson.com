@@ -1,0 +1,12 @@
+<html>
+<head>
+<script>
+  let blob = new Blob(['<?xml version="1.0" encoding="utf-8"?><x></x>'], { type: "text/xml" });
+  const iframe = document.createElement('iframe');
+  iframe.src = URL.createObjectURL(blob);
+  document.documentElement.appendChild(iframe);
+</script>
+</head>
+<body>
+  <h2>Test Blob Iframe Source</h2>
+</body>
