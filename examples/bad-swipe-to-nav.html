@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<style>
+html, body {
+  height: 2000px;
+  overscroll-behavior-x: none;
+  margin: 0;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.grid-container {
+  display: grid;
+  row-gap: 50px;
+  text-align: center;
+}
+
+#backicon {
+  display: fixed;
+  left: 0px;
+  top: 50%;
+  height: 150px;
+}
+
+</style>
+<body>
+  <div class="grid-container">
+    <div style="grid-column-start: 0;">
+      Nothing to see here! Use swipe to nav to go back :)
+    </div>
+    <div style="grid-column-start: 1;">
+      <img src="/examples/images/obi-wan-0.gif"/>
+    </div>
+  </div>
+  <img id="backicon"/>
+</body>
+<script>
+  let navigateBack = false;
+  let deltaX = 0;
+
+  function onOverscroll(e) {
+    if (e.deltaX < 0) {
+      if (!navigateBack) {
+        let backicon = document.getElementById("backicon");
+        backicon.src = "/examples/images/history-swipe-arrow.svg";
+      }
+      navigateBack = true;
+      deltaX
+    }
+  }
+
+  document.addEventListener("overscroll", onOverscroll);
+
+  function onScrollend(e) {
+    if (navigateBack) {
+      console.log("BADNESS");
+      let backicon = document.getElementById("backicon");
+      backicon.style.display = "none";
+      window.location.replace("/examples/bad-swipe-to-nav-target.html");
+    }
+  }
+
+  document.addEventListener("scrollend", onScrollend);
+</script>
