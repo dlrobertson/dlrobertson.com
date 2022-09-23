@@ -19,7 +19,7 @@ html, body {
 }
 
 #backicon {
-  display: fixed;
+  position: fixed;
   left: 0px;
   top: 50%;
   height: 150px;
@@ -40,7 +40,6 @@ html, body {
 </body>
 <script>
   let navigateBack = false;
-  let deltaX = 0;
 
   function onOverscroll(e) {
     if (e.deltaX < 0) {
@@ -49,7 +48,6 @@ html, body {
         backicon.src = "/examples/images/history-swipe-arrow.svg";
       }
       navigateBack = true;
-      deltaX
     }
   }
 
@@ -57,7 +55,6 @@ html, body {
 
   function onScrollend(e) {
     if (navigateBack) {
-      console.log("BADNESS");
       let backicon = document.getElementById("backicon");
       backicon.style.display = "none";
       window.location.replace("/examples/bad-swipe-to-nav-target.html");
