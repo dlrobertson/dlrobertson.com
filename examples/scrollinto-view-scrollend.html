@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<head>
+<style>
+#container {
+  align: center;
+  display: grid;
+  column-gap: 25px;
+  row-gap: 25px;
+}
+
+#target {
+  height: 500px;
+  width: 500px;
+  background: yellow;
+  overflow: scroll;
+  grid-column-start: 2;
+  grid-row-start: 1;
+  grid-row-end: 3;
+}
+
+#inner {
+  height: 5000px;
+  width: 5000px;
+  background: red;
+}
+
+#summary {
+  height: 250px;
+  width: 500px;
+  grid-column-start: 1;
+  grid-row-start: 2;
+}
+
+#testrunning {
+  height: 250px;
+  width: 500px;
+  grid-column-start: 1;
+  grid-row-start: 1;
+}
+
+</style>
+</head>
+<body>
+  <div id="container">
+    <div id="target">
+      <div id="inner">
+      </div>
+    </div>
+    <div id="summary">
+      <div id="documentSummary"></div>
+      <div id="elementSummary"></div>
+    </div>
+    <div id="testrunning">
+      Test Phase:
+    </div>
+  </div>
+<script>
+
+let elementStats = {
+  "name": "Element",
+  "scrollend": 0,
+  "scroll": 0,
+};
+
+let documentStats= {
+  "name": "Document",
+  "scrollend": 0,
+  "scroll": 0,
+};
+
+function printSummary(element, stats) {
+  let scrollendStr = "Scrollend Event Count: " + stats["scrollend"];
+  let scrollStr = "Scroll Event Count: " + stats["scroll"];
+  element.innerHTML = stats["name"] + "<br>" + scrollendStr + "<br>" + scrollStr;
+}
+
+printSummary(elementSummary, elementStats);
+printSummary(documentSummary, documentStats);
+
+async function setup() {
+    function onTargetScrollend(e) {
+        elementStats["scrollend"] += 1;
+        printSummary(elementSummary, elementStats);
+        console.log("scrollend: " + e.target.id);
+        console.log("\tbubbles: " + e.bubbles);
+        console.log("\tcancelable: " + e.cancelable);
+    }
+
+    function onDocumentScrollend(e) {
+        documentStats["scrollend"] += 1;
+        printSummary(documentSummary, documentStats);
+        console.log("scrollend: Document");
+        console.log("\tbubbles: " + e.bubbles);
+        console.log("\tcancelable: " + e.cancelable);
+    }
+
+    function onDocumentScroll(e) {
+        documentStats["scroll"] += 1;
+        printSummary(documentSummary, documentStats);
+        console.log("Document scroll: " + e.target);
+    }
+
+    function onTargetScroll(e) {
+        elementStats["scroll"] += 1;
+        printSummary(elementSummary, elementStats);
+        console.log("Element scroll: " + e.target);
+        e.stopPropagation();
+    }
+
+    document.addEventListener("scrollend", onDocumentScrollend);
+    document.addEventListener("scroll", onDocumentScroll);
+
+    target.addEventListener("scrollend", onTargetScrollend);
+    target.addEventListener("scroll", onTargetScroll);
+
+    console.log("target scroll to midpoint");
+    testrunning.innerHTML = 'Test Phase:<br>element.scroll(2000, 2000);';
+    target.scrollTo(2000, 2000);
+}
+
+function test1() {
+    console.log("scrollIntoView inline and block end");
+    testrunning.innerHTML = 'Test Phase:<br>element.scrollIntoView({inline: "end", block: "end", behavior: "smooth"});';
+    inner.scrollIntoView({inline: "end", block: "end", behavior: "smooth"});
+}
+
+function cleanup() {
+    inner.scrollTo(0, 0);
+}
+
+let tests = [
+  setup,
+  test1,
+];
+
+async function test() {
+    for (let i = 0; i < tests.length; i++) {
+        await new Promise(resolve => setTimeout(() => {
+            tests[i]();
+            resolve();
+        }, 1000));
+    }
+}
+
+test();
+</script>
+</body>
