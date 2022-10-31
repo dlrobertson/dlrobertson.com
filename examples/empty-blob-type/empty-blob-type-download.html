@@ -1,0 +1,53 @@
+<html>
+<head>
+<script>
+  fetch("example.html").then((htmlResp) => {
+    return htmlResp.arrayBuffer();
+  }).then((htmlData) => {
+    var htmlBlob = new Blob([htmlData]);
+    var htmlUrl = URL.createObjectURL(htmlBlob);
+    const htmlLink = document.createElement('a');
+    htmlLink.href = htmlUrl;
+    htmlLink.download = "test-empty-blob-type.html"
+    htmlLink.click();
+  });
+
+
+  fetch("/images/granger-face.png").then((pngResp) => {
+    return pngResp.arrayBuffer();
+  }).then((pngData) => {
+    var pngBlob = new Blob([pngData]);
+    var pngUrl = URL.createObjectURL(pngBlob);
+    const pngLink = document.createElement('a');
+    pngLink.href = pngUrl;
+    pngLink.download = "test-empty-blob-type.png"
+    pngLink.click();
+  });
+
+
+  fetch("/resume/drobertson.pdf").then((pdfResp) => {
+    return pdfResp.arrayBuffer();
+  }).then((pdfData) => {
+    var pdfBlob = new Blob([pdfData]);
+    var pdfUrl = URL.createObjectURL(pdfBlob);
+    const pdfLink = document.createElement('a');
+    pdfLink.href = pdfUrl;
+    pdfLink.download = "test-empty-blob-type.pdf";
+    pdfLink.click();
+  });
+
+  setTimeout(() => {
+    var emptyBlob = new Blob([]);
+    var emptyUrl = URL.createObjectURL(emptyBlob);
+    const emptyLink = document.createElement('a');
+    emptyLink.href = emptyUrl;
+    emptyLink.download = "test-empty-blob-type";
+    emptyLink.click();
+  }, 100);
+</script>
+</head>
+</script>
+</head>
+<body>
+  <h2>Test Download of Blob with Empty Type</h2>
+</body>

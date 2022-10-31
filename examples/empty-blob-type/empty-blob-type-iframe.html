@@ -1,0 +1,45 @@
+<html>
+<head>
+<script>
+  fetch("example.html").then((htmlResp) => {
+    return htmlResp.arrayBuffer();
+  }).then((htmlData) => {
+    var htmlBlob = new Blob([htmlData]);
+    var htmlUrl = URL.createObjectURL(htmlBlob);
+    const htmlIframe = document.createElement('iframe');
+    htmlIframe.src = URL.createObjectURL(htmlBlob);
+    document.documentElement.appendChild(htmlIframe);
+  });
+
+  fetch("/images/granger-face.png").then((pngResp) => {
+    return pngResp.arrayBuffer();
+  }).then((pngData) => {
+    var pngBlob = new Blob([pngData]);
+    var pngUrl = URL.createObjectURL(pngBlob);
+    const pngIframe = document.createElement('iframe');
+    pngIframe.src = URL.createObjectURL(pngBlob);
+    document.documentElement.appendChild(pngIframe);
+  });
+
+  fetch("/resume/drobertson.pdf").then((pdfResp) => {
+    return pdfResp.arrayBuffer();
+  }).then((pdfData) => {
+    var pdfBlob = new Blob([pdfData]);
+    var pdfUrl = URL.createObjectURL(pdfBlob);
+    const pdfIframe = document.createElement('iframe');
+    pdfIframe.src = URL.createObjectURL(pdfBlob);
+    document.documentElement.appendChild(pdfIframe);
+  });
+
+  setTimeout(() => {
+    var emptyBlob = new Blob([]);
+    var emptyUrl = URL.createObjectURL(emptyBlob);
+    const emptyIframe = document.createElement('iframe');
+    emptyIframe.src = URL.createObjectURL(emptyBlob);
+    document.documentElement.appendChild(emptyIframe);
+  }, 100);
+</script>
+</head>
+<body>
+  <h2>Test Iframe of Blob with Empty Type</h2>
+</body>
