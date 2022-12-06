@@ -40,10 +40,6 @@ html, body {
   color: orange;
 }
 
-#gotem {
-  display: none;
-}
-
 #singin {
   position: fixed;
   right: 0px;
@@ -64,7 +60,7 @@ html, body {
 
 </style>
 <body>
-  <div id="singin" onclick="gotEm()">
+  <div id="singin">
     Sing In
   </div>
   <div class="grid-container">
@@ -82,40 +78,52 @@ html, body {
     </div>
     <div style="grid-row-start: 3;">
       <input type="text" size="50%"></input>
-      <button type="button" onclick="gotEm()">Shelve</button>
-    </div>
-    <div id="gotem" style="grid-row-start: 4;">
-      <img src="/examples/images/got-em.gif"/>
+      <button type="button">Shelve</button>
     </div>
   </div>
   <img id="fwdicon"/>
 </body>
 <script>
-  function gotEm() {
-    gotem.style.display = "block";
-  }
+  const urlParams = new URLSearchParams(location.search);
 
   let navigateForward = false;
 
-  function onOverscroll(e) {
+  let timeoutCallback = null;
+
+  function hijackedNavigateForward() {
+    window.location.replace("/examples/s2n/" + urlParams.get("src"));
+  }
+
+  var accumulatedDelta = 0;
+  function onWheel(e) {
     if (e.deltaX > 0) {
       if (!navigateForward) {
         let fwdicon = document.getElementById("fwdicon");
         fwdicon.src = "/examples/images/history-swipe-arrow.svg";
+        navigateForward = true;
+        timoutCallback = setTimeout(() => {
+          hijackedNavigateForward();
+        }, 500);
+      } else {
+        clearTimeout(timeoutCallback);
       }
-      navigateForward = true;
+      accumulatedDelta += e.deltaX;
     }
   }
 
-  document.addEventListener("overscroll", onOverscroll);
+  document.addEventListener("wheel", onWheel);
 
-  function onScrollend(e) {
-    if (navigateForward) {
-      let fwdicon = document.getElementById("fwdicon");
+  function onTouchEnd(e) {
+    console.log("touchend");
+    let fwdicon = document.getElementById("fwdicon");
+    if (navigateForward && accumulatedDelta > 100) {
+      hijackedNavigateForward();
+    } else {
+      navigateForward = false;
+      clearTimeout(timeoutCallback);
       fwdicon.style.display = "none";
-      window.location.replace("/examples/bad-swipe-to-nav.html");
     }
   }
+  document.addEventListener("touchend", onTouchEnd);
 
-  document.addEventListener("scrollend", onScrollend);
 </script>

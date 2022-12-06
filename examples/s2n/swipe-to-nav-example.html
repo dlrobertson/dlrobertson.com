@@ -40,26 +40,46 @@ html, body {
 </body>
 <script>
   let navigateBack = false;
+  let timeoutCallback = null;
 
-  function onOverscroll(e) {
+  function hijackedNavigateBack() {
+    window.location.replace("/examples/s2n/nav-target.html?src=swipe-to-nav-example.html");
+  }
+
+  var accumulatedDelta = 0;
+  function onWheel(e) {
+    if (document.scrollingElement.scrollLeft != 0) {
+      return
+    }
+
     if (e.deltaX < 0) {
       if (!navigateBack) {
         let backicon = document.getElementById("backicon");
         backicon.src = "/examples/images/history-swipe-arrow.svg";
+        navigateBack = true;
+        timoutCallback = setTimeout(() => {
+          hijackedNavigateBack();
+        }, 500);
+      } else {
+        clearTimeout(timeoutCallback);
       }
-      navigateBack = true;
+      accumulatedDelta += e.deltaX;
     }
   }
 
-  document.addEventListener("overscroll", onOverscroll);
+  document.addEventListener("wheel", onWheel);
 
-  function onScrollend(e) {
-    if (navigateBack) {
-      let backicon = document.getElementById("backicon");
+  function onTouchEnd(e) {
+    console.log("touchend");
+    let backicon = document.getElementById("backicon");
+    if (navigateBack && accumulatedDelta < -100) {
+      hijackedNavigateBack();
+    } else {
+      navigateBack = false;
+      clearTimeout(timeoutCallback);
       backicon.style.display = "none";
-      window.location.replace("/examples/bad-swipe-to-nav-target.html");
     }
   }
+  document.addEventListener("touchend", onTouchEnd);
 
-  document.addEventListener("scrollend", onScrollend);
 </script>
