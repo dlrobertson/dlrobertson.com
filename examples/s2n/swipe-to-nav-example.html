@@ -69,6 +69,15 @@ html, body {
 
   document.addEventListener("wheel", onWheel);
 
+  // Safari doesn't include swipe-to-nav in the non-local boundary actions
+  // ignored when overscroll-behavior-x: contain | none is set. This _can_
+  // be blocked by preventDefault on touchstart.
+  //
+  // See: https://pqina.nl/blog/blocking-navigation-gestures-on-ios-13-4/
+  document.scrollingElement.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+  });
+
   function onTouchEnd(e) {
     console.log("touchend");
     let backicon = document.getElementById("backicon");
