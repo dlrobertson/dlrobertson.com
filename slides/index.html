@@ -1,9 +1,27 @@
+---
+layout: default
+---
+
 <head>
     <title>Dan Robertson's Slides</title>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="icon" type="image/png" href="/images/favicon.png" />
+<style>
+
+.grid-container {
+  width: 100%;
+  height: 100%;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  display: grid;
+  row-gap: 5px;
+  column-gap: 5px;
+  column-gap: 50px;
+  text-align: center;
+}
+</style>
 </head>
 <body>
   <style>
@@ -25,19 +43,19 @@
         }
     }
   </script>
-  <div class="container">
-    <select onchange="if (this.selectedIndex >= 0) populateIframe(this.options[this.selectedIndex].value)">
-      <option value="kernel-contrib-09-25-2020.html">Sep 25, 2020</option>
-      <option value="va-list-12-13-2018.html" selected="selected">Dec 14, 2018</option>
-      <option value="sylkie-10-02-2017.html">Oct 2, 2017</option>
-      <option value="anidata-oss-02-22-2017.html">Feb 22, 2017</option>
-    </select>
-    <a class="btn btn-primary btn-md" id="selected-fullscreen" href="va-list-12-13-2018.html">Full Screen</a>
-  </div>
-  <br>
-  <div class="main-display-area">
-    <div class="col-md-6">
-      <iframe src="va-list-12-13-2018.html" id="slideiframe" class="iframe" name="info" seamless="" width="100%" height="90%"></iframe>
+  <div class="grid-container">
+    <div style="grid-row-start: 1; grid-column-start: 1;">
+      <iframe src="va-list-12-13-2018.html">
+      </iframe>
+      <br>
+      <a href="va-list-12-13-2018.html">Full Screen</a>
+    </div>
+    <div style="grid-row-start: 2; grid-column-start: 1;">
+      <iframe src="sylkie-10-02-2017.html">
+      </iframe>
+      <br>
+      <a href="sylkie-10-02-2017.html">Full Screen</a>
+     </div>
     </div>
   </div>
 </body>
