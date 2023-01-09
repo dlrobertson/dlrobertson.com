@@ -120,67 +120,9 @@ code.mem-layout {
                 </section>
 
                 <section>
-                    <h3><code>add_n</code></h3>
-                    <section data-transition="none">
-<pre><code class="c code-block" data-trim contenteditable>
-#include &ltstdarg.h&gt
-int add_n(int n, ...) {
-
-
-
-
-
-
-
-
-
-
-
-
-}
-</code></pre>
-                    </section>
-                    <section data-transition="none">
-<pre><code class="c code-block" data-trim contenteditable>
-#include &ltstdarg.h&gt
-int add_n(int n, ...) {
-  // Declare local variables
-  va_list ap;
-  int ret = 0;
-
-
-
-
-
-
-
-
-
-}
-</code></pre>
-                    </section>
-                    <section data-transition="none">
-<pre><code class="c code-block" data-trim contenteditable>
-#include &ltstdarg.h&gt
-int add_n(int n, ...) {
-  // Declare local variables
-  va_list ap;
-  int ret = 0;
-
-  // Initialize the list and
-  // call the "real" add_n
-  va_start(ap, n);
-  ret = vadd_n(n, ap);
-
-
-
-
-}
-</code></pre>
-                    </section>
-                    <section data-transition="none">
-<pre><code class="c code-block" data-trim contenteditable>
-#include &ltstdarg.h&gt
+                  <h3><code>add_n</code></h3>
+<pre data-id="code-animation"><code class="hljs c" data-trim data-line-numbers="0-2,15|3-5|7-10|12-14|"><script type="text/template">
+#include <stdarg.h>
 int add_n(int n, ...) {
   // Declare local variables
   va_list ap;
@@ -195,42 +137,13 @@ int add_n(int n, ...) {
   va_end(ap);
   return ret;
 }
-</code></pre>
-                    </section>
+</script></code></pre>
                 </section>
 
                 <section>
                     <h3><code>vadd_n</code></h3>
                     <section data-transition="none">
-<pre><code class="c code-block" data-trim contenteditable>
-// Worker function
-int vadd_n(int n, va_list ap) {
-  int sum = 0;
-
-
-
-
-
-
-}
-</code></pre>
-                    </section>
-                    <section data-transition="none">
-<pre><code class="c code-block" data-trim contenteditable>
-// Worker function
-int vadd_n(int n, va_list ap) {
-  int sum = 0;
-  // Loop n times and add the given
-  // argument of type int.
-  for (i = 0; i &lt n; ++i) {
-
-  }
-  return sum;
-}
-</code></pre>
-                    </section>
-                    <section data-transition="none">
-<pre><code class="c code-block" data-trim contenteditable>
+<pre data-id="code-animation"><code class="hljs c" data-trim data-line-numbers="0-2,10|3-6,8-9|7|"><script type="text/template">
 // Worker function
 int vadd_n(int n, va_list ap) {
   int sum = 0;
@@ -241,7 +154,7 @@ int vadd_n(int n, va_list ap) {
   }
   return sum;
 }
-</code></pre>
+</script></code></pre>
                     </section>
                 </section>
 
@@ -311,64 +224,8 @@ impl<'a> VaList<'a> {
 
                 <section>
                     <h3><code>vadd_n</code> in Rust</h3>
-                    <section data-transition="none">
-<pre><code class="rust code-block" contenteditable>#![feature(c_variadic)]
-use std::ffi::VaList;
-
-
-
-
-
-
-
-
-
-
-
-
-
-</code></pre>
-                    </section>
-                    <section data-transition="none">
-<pre><code class="rust code-block" data-trim contenteditable>
-#![feature(c_variadic)]
-use std::ffi::VaList;
-
-// Worker function
-#[no_mangle]
-pub unsafe extern "C" fn vadd_n(
-  n: c_int,
-  ap: VaList
-) -&gt c_int {
-
-
-
-
-
-}
-</code></pre>
-                    </section>
-                    <section data-transition="none">
-<pre><code class="rust code-block" data-trim contenteditable>
-#![feature(c_variadic)]
-use std::ffi::VaList;
-
-// Worker function
-#[no_mangle]
-pub unsafe extern "C" fn vadd_n(
-  n: c_int,
-  ap: VaList
-) -&gt c_int {
-  let mut sum = 0;
-  for i in 0..n {
-
-  }
-  sum
-}
-</code></pre>
-                    </section>
-                    <section data-transition="none">
-<pre><code class="rust code-block" data-trim contenteditable>
+                    <section>
+<pre data-id="code-animation"><code class="hljs rust" data-trim data-line-numbers="0-9,15|10-11,13-14|12|"><script type="text/template">
 #![feature(c_variadic)]
 use std::ffi::VaList;
 
@@ -384,7 +241,7 @@ pub unsafe extern "C" fn vadd_n(
   }
   sum
 }
-</code></pre>
+</script></code></pre>
                     </section>
                     <section>
                         <img src="images/kip-yes.gif" style="border:none"/>
@@ -442,11 +299,7 @@ pub unsafe extern "C" fn vadd_n(
                     </section>
 
                     <section>
-                        <small>
-                            <i>Note: Not yet implemented.</i>
-                        </small>
-                        <span class="fragment">
-<pre><code class="rust code-block" data-trim contenteditable>
+<pre data-id="code-animation"><code class="hljs rust" data-trim><script type="text/template">
 #![no_std]
 #![feature(c_variadic)]
 use core::ffi::VaList;
@@ -458,13 +311,31 @@ pub unsafe extern "C" fn func(fixed: u32, mut ap: ...) {
   let z: u32 = args.arg();
   println!("{} {} {} {}", fixed, x, y, z);
 }
-</code></pre>
+</script></code></pre>
 
+                            <div style="display: grid; width: 100%; column-gap: 10px;">
+                              <div style="grid-column-start: 1; grid-column-end: 2;">
+                                <small>
+                                  Note: <code>va_start()</code> and <code>va_end()</code> injected
+                                  auto<span data-fragment-index="1" class="fragment highlight-green">magic</span>ally by compiler.
+                                </small>
+                                <br>
+                                <br>
+
+                                <span class="fragment" data-fragment-index="1">
+                                  <small>
+                                    <i >Implemented in <a href="https://github.com/rust-lang/rust/pull/57760">rust-lang/rust#57760</a></i>
+                                  </small>
+                                </span>
+                              </div>
+                              <div style="grid-column-start: 3;">
+                                <div class="fragment" data-fragment-index="1">
+                                  <img src="images/magic.gif" style="border:none"/>
+                                </div>
+                              </div>
+                            </div>
                             <p>
-                                <code>va_start()</code> and <code>va_end()</code> injected
-                                automagically by compiler.
                             </p>
-                        </span>
                     </section>
 
                     <section>
@@ -782,7 +653,9 @@ vr_top |                                                           |
                     <p>
                         <small>
                             And everyone else that helped me with
-                            <a href="https://github.com/rust-lang/rust/pull/49878">rust-lang/rust#49878</a>
+                            <a href="https://github.com/rust-lang/rust/pull/49878">rust-lang/rust#49878</a>,
+                            <a href="https://github.com/rust-lang/rust/pull/57760">rust-lang/rust#57760</a>,
+                            and the many follow-up bugs.
                         </small>
                     </p>
                 </section>
