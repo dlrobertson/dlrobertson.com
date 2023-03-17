@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+  text-align: center;
+}
+
+#top {
+  margin: auto;
+  width: 100%;
+  height: 50vh;
+}
+
+#middle {
+  width: 100%;
+  height: 200vh;
+  background: black;
+  color: red;
+}
+
+#middletext {
+  position: sticky;
+  top: 60vh;
+}
+
+#target {
+  margin: auto;
+  width: 100%;
+  height: 50vh;
+}
+</style>
+  </head>
+  <body>
+    <div id="top">
+      This is the top, but try to scroll to the bottom of this page
+    </div>
+    <div id="middle">
+      <div id="middletext">
+        Try to get past me... hard isn't it?
+      </div>
+    </div>
+    <div id="target">
+      \o/ you did it! I'm quite impressed!
+    </div>
+  </body>
+  <script>
+    middle.addEventListener("wheel", (e) => {
+      e.preventDefault();
+    });
+  </script>
+</html>
