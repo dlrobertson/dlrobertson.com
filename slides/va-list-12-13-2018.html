@@ -149,7 +149,7 @@ int vadd_n(int n, va_list ap) {
   int sum = 0;
   // Loop n times and add the given
   // argument of type int.
-  for (i = 0; i &lt n; ++i) {
+  for (i = 0; i < n; ++i) {
     sum += va_arg(ap, int);
   }
   return sum;
@@ -234,17 +234,29 @@ use std::ffi::VaList;
 pub unsafe extern "C" fn vadd_n(
   n: c_int,
   ap: VaList
-) -&gt c_int {
+) -> c_int {
   let mut sum = 0;
   for i in 0..n {
-    sum += ap.arg::&ltc_int&gt()
+    sum += ap.arg::<c_int>()
   }
   sum
 }
 </script></code></pre>
                     </section>
                     <section>
-                        <img src="images/kip-yes.gif" style="border:none"/>
+                        <div style="display: grid; width: 100%; column-gap: 10px;">
+                          <div style="grid-row-start: 1; grid-row-end: 2;">
+                            <img src="images/kip-yes.gif" style="border:none"/>
+                          </div>
+                          <div style="grid-row-start: 3;">
+                            <small>
+                              <ul>
+                                <li><a href="https://github.com/rust-lang/rust/pull/49878">rust-lang/rust#49878</a></li>
+                                <li><a href="https://github.com/rust-lang/rust/pull/57760">rust-lang/rust#57760</a></li>
+                              </ul>
+                            </small>
+                          </div>
+                        </div>
                     </section>
                 </section>
 
@@ -411,16 +423,23 @@ unsafe fn bad_idea(
                         <div class="split-container">
                             <div class="col">
                                 <p>
-                                    Enter Windows
-                                    <br>
-                                    <small>(and iOS)</small>
+                                    Expectation vs. Reality
                                 </p>
-                                <p class="fragment fade-up">
-                                    <b>always</b> Character/Void Pointer
+                                <br>
+                                <p class="fragment fade-up" data-fragment-index="1">
+                                    Some OSes
+                                    <b>always</b> use Character/Void Pointer
                                  </p>
                             </div>
-                            <div class="col">
-                                <img src="images/gates-not-a-bug.jpg" style="border:none"/>
+                            <div class="fragment col" data-fragment-index="1">
+                                <div style="display: grid; width: 100%; column-gap: 10px;">
+                                    <div style="height: 25vh; grid-column-start: 1; grid-column-end: 2;">
+                                      <img src="images/windows-95-logo.svg" style="border:none"/>
+                                    </div>
+                                    <div style="height: 25vh; grid-column-start: 2; grid-row-start: 2">
+                                      <img src="images/iOS-logo.svg" style="border:none"/>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </section>
@@ -634,7 +653,8 @@ vr_top |                                                           |
                 <section style="text-align: left;">
                     <h3>Acknowledgements</h3>
                     <p>
-                    	<small>
+                        <small>
+                            Initial implementation:
                             <span>
                                 <ul>
                                     <li>
@@ -644,20 +664,29 @@ vr_top |                                                           |
                                         <a href="https://github.com/joshtriplett">@joshtriplett</a>
                                     </li>
                                     <li>
-                                        <a href="https://github.com/rkruppe">@rkruppe</a>
+                                        <a href="https://github.com/hanna-kruppe">@hanna-kruppe</a>
                                     </li>
                                 </ul>
                             </span>
                         </small>
                     </p>
-                    <p>
-                        <small>
-                            And everyone else that helped me with
-                            <a href="https://github.com/rust-lang/rust/pull/49878">rust-lang/rust#49878</a>,
-                            <a href="https://github.com/rust-lang/rust/pull/57760">rust-lang/rust#57760</a>,
-                            and the many follow-up bugs.
-                        </small>
-                    </p>
+                    <br>
+                    <p><small>
+                      Follow-up work:
+                      <span>
+                        <ul>
+                          <li>
+                            <a htref="https://github.com/uweigand">@uweigand</a>: s390x support
+                          </li>
+                          <li>
+                            <a htref="https://github.com/JamieCunliffe">@JamieCunliffe</a>: AAPCS support
+                          </li>
+                          <li>
+                            <a htref="https://github.com/ahomescu">@ahomescu</a>: many API improvements
+                          </li>
+                        </ul>
+                      </span>
+                    </small></p>
                 </section>
 
                 <section style="text-align: left;">
