@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<style>
+  div.target {
+    width: 100px;
+    height: 100px;
+  }
+
+  div.container {
+    display: grid;
+    row-gap: 10vw;
+    column-gap: 10vw;
+    justify-items: center;
+  }
+
+  div#notscrollabletarget {
+    grid-row: 1;
+    grid-column: 1;
+    background: red;
+  }
+  div#notscrollabletarget:active {
+    background: green;
+  }
+
+
+  div#scrollabletarget {
+    grid-row: 1;
+    grid-column: 2;
+    overflow: scroll;
+    background: yellow;
+  }
+  div#scrollabletarget > div#subtarget {
+    height: 250px;;
+    width: 250px;
+    background: red;
+  }
+  div#scrollabletarget > div#subtarget:active {
+    background: green;
+  }
+
+  div#report {
+    grid-column: 1 / 3;
+    grid-row: 2;
+  }
+</style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="target" id="notscrollabletarget">
+        not scrollable
+      </div>
+      <div class="target" id="scrollabletarget">
+        <div id="subtarget">
+          scrollable
+        </div>
+      </div>
+      <div id="report">
+        <div id="clickreport">
+                click:
+                  count=
+                  timestamp=
+        </div>
+        <br>
+        <div id="pointerdownreport">
+                pointerdown: count= timestamp=
+        </div>
+        <div id="pointermovereport">
+                pointermove: count= timestamp=
+        </div>
+        <div id="pointerupreport">
+                pointerup: count= timestamp=
+        </div>
+        <br>
+        <div id="mousedownreport">
+                mousedown: count= timestamp=
+        </div>
+        <div id="mousemovereport">
+                mousemove: count= timestamp=
+        </div>
+        <div id="mouseupreport">
+                mouseup: count= timestamp=
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+  function printEventInfo(elem, name, count, timestamp, target) {
+    elem.innerHTML = name + ": " + "count=" + count + " timestamp=" + timestamp;
+    if (target == document) {
+      elem.innerHTML += "target=document";
+    } else if (target == window) {
+      elem.innerHTML += "target=window";
+    } else {
+      elem.innerHTML += "target=" target.id;
+    }
+  }
+
+  let clickCount = 0;
+  function onClickCount(e) {
+    printEventInfo(clickreport, "click", clickCount, e.timeStamp, e.target);
+    clickCount += 1;
+  }
+  scrollabletarget.addEventListener("click", onClickCount);
+  notscrollabletarget.addEventListener("click", onClickCount);
+
+  let pointerupCount = 0;
+  function onPointerUpCount(e) {
+    printEventInfo(pointerupreport, "pointerup", pointerupCount, e.timeStamp,
+                   e.target);
+    pointerupCount += 1;
+  }
+  scrollabletarget.addEventListener("pointerup", onPointerUpCount);
+  notscrollabletarget.addEventListener("pointerup", onPointerUpCount);
+
+  let pointermoveCount = 0;
+  function onPointerMoveCount(e) {
+    printEventInfo(pointermovereport, "pointermove", pointermoveCount,
+                   e.timeStamp, e.target);
+    pointermoveCount += 1;
+  }
+  scrollabletarget.addEventListener("pointermove", onPointerMoveCount);
+  notscrollabletarget.addEventListener("pointermove", onPointerMoveCount);
+
+  let pointerdownCount = 0;
+  function onPointerDownCount(e) {
+    printEventInfo(pointerdownreport, "pointerdown", pointerdownCount,
+                   e.timeStamp, e.target);
+    pointerdownCount += 1;
+  }
+  scrollabletarget.addEventListener("pointerdown", onPointerDownCount);
+  notscrollabletarget.addEventListener("pointerdown", onPointerDownCount);
+
+  let mousedownCount = 0;
+  function onMouseDownCount(e) {
+    printEventInfo(mousedownreport, "mousedown", mousedownCount, e.timeStamp,
+                   e.target);
+    mousedownCount += 1;
+  }
+  scrollabletarget.addEventListener("mousedown", onMouseDownCount);
+  notscrollabletarget.addEventListener("mousedown", onMouseDownCount);
+
+  let mousemoveCount = 0;
+  function onMouseMoveCount(e) {
+    printEventInfo(mousemovereport, "mousemove", mousemoveCount, e.timeStamp,
+                   e.target);
+    mousemoveCount += 1;
+  }
+  scrollabletarget.addEventListener("mousemove", onMouseMoveCount);
+  notscrollabletarget.addEventListener("mousemove", onMouseMoveCount);
+
+  let mouseupCount = 0;
+  function onMouseUpCount(e) {
+    printEventInfo(mouseupreport, "mouseup", mouseupCount, e.timeStamp,
+                   e.target);
+    mouseupCount += 1;
+  }
+  scrollabletarget.addEventListener("mouseup", onMouseUpCount);
+  notscrollabletarget.addEventListener("mouseup", onMouseUpCount);
+  </script>
+</html>
