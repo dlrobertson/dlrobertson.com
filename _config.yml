@@ -1,7 +1,7 @@
 # Site settings
 title: "Dan Robertson"
-description: "Dan Robertson's website"
-url: "http://dlrobertson.com"
+description: "Systems software engineer focused on the Linux kernel, filesystems, eBPF, Rust, C, and upstream open source contributions."
+url: "https://dlrobertson.com"
 baseurl: ""
 
 #  Build settings
